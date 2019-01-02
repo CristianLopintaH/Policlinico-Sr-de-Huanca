@@ -1,0 +1,1600 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+*** GENERATED FROM project.xml - DO NOT EDIT  ***
+***         EDIT ../build.xml INSTEAD         ***
+
+For the purpose of easier reading the script
+is divided into following sections:
+
+  - initialization
+  - compilation
+  - jar
+  - execution
+  - debugging
+  - javadoc
+  - test compilation
+  - test execution
+  - test debugging
+  - applet
+  - cleanup
+
+        -->
+<project xmlns:j2seproject1="http://www.netbeans.org/ns/j2se-project/1" xmlns:j2seproject3="http://www.netbeans.org/ns/j2se-project/3" xmlns:jaxrpc="http://www.netbeans.org/ns/j2se-project/jax-rpc" basedir=".." default="default" name="pryDemo-impl">
+    <fail message="Please build using Ant 1.8.0 or higher.">
+        <condition>
+            <not>
+                <antversion atleast="1.8.0"/>
+            </not>
+        </condition>
+    </fail>
+    <target depends="test,jar,javadoc" description="Build and test whole project." name="default"/>
+    <!-- 
+                ======================
+                INITIALIZATION SECTION 
+                ======================
+            -->
+    <target name="-pre-init">
+        <!-- Empty placeholder for easier customization. -->
+        <!-- You can override this target in the ../build.xml file. -->
+    </target>
+    <target depends="-pre-init" name="-init-private">
+        <property file="nbproject/private/config.properties"/>
+        <property file="nbproject/private/configs/${config}.properties"/>
+        <property file="nbproject/private/private.properties"/>
+    </target>
+    <target depends="-pre-init,-init-private" name="-init-user">
+        <property file="${user.properties.file}"/>
+        <!-- The two properties below are usually overridden -->
+        <!-- by the active platform. Just a fallback. -->
+        <property name="default.javac.source" value="1.4"/>
+        <property name="default.javac.target" value="1.4"/>
+    </target>
+    <target depends="-pre-init,-init-private,-init-user" name="-init-project">
+        <property file="nbproject/configs/${config}.properties"/>
+        <property file="nbproject/project.properties"/>
+    </target>
+    <target depends="-pre-init,-init-private,-init-user,-init-project,-init-macrodef-property" name="-do-init">
+        <property name="platform.java" value="${java.home}/bin/java"/>
+        <available file="${manifest.file}" property="manifest.available"/>
+        <condition property="splashscreen.available">
+            <and>
+                <not>
+                    <equals arg1="${application.splash}" arg2="" trim="true"/>
+                </not>
+                <available file="${application.splash}"/>
+            </and>
+        </condition>
+        <condition property="main.class.available">
+            <and>
+                <isset property="main.class"/>
+                <not>
+                    <equals arg1="${main.class}" arg2="" trim="true"/>
+                </not>
+            </and>
+        </condition>
+        <condition property="profile.available">
+            <and>
+                <isset property="javac.profile"/>
+                <length length="0" string="${javac.profile}" when="greater"/>
+                <matches pattern="1\.[89](\..*)?" string="${javac.source}"/>
+            </and>
+        </condition>
+        <condition property="do.archive">
+            <or>
+                <not>
+                    <istrue value="${jar.archive.disabled}"/>
+                </not>
+                <istrue value="${not.archive.disabled}"/>
+            </or>
+        </condition>
+        <condition property="do.mkdist">
+            <and>
+                <isset property="do.archive"/>
+                <isset property="libs.CopyLibs.classpath"/>
+                <not>
+                    <istrue value="${mkdist.disabled}"/>
+                </not>
+            </and>
+        </condition>
+        <condition property="do.archive+manifest.available">
+            <and>
+                <isset property="manifest.available"/>
+                <istrue value="${do.archive}"/>
+            </and>
+        </condition>
+        <condition property="do.archive+main.class.available">
+            <and>
+                <isset property="main.class.available"/>
+                <istrue value="${do.archive}"/>
+            </and>
+        </condition>
+        <condition property="do.archive+splashscreen.available">
+            <and>
+                <isset property="splashscreen.available"/>
+                <istrue value="${do.archive}"/>
+            </and>
+        </condition>
+        <condition property="do.archive+profile.available">
+            <and>
+                <isset property="profile.available"/>
+                <istrue value="${do.archive}"/>
+            </and>
+        </condition>
+        <condition property="have.tests">
+            <or>
+                <available file="${test.src.dir}"/>
+            </or>
+        </condition>
+        <condition property="have.sources">
+            <or>
+                <available file="${src.dir}"/>
+            </or>
+        </condition>
+        <condition property="netbeans.home+have.tests">
+            <and>
+                <isset property="netbeans.home"/>
+                <isset property="have.tests"/>
+            </and>
+        </condition>
+        <condition property="no.javadoc.preview">
+            <and>
+                <isset property="javadoc.preview"/>
+                <isfalse value="${javadoc.preview}"/>
+            </and>
+        </condition>
+        <property name="run.jvmargs" value=""/>
+        <property name="run.jvmargs.ide" value=""/>
+        <property name="javac.compilerargs" value=""/>
+        <property name="work.dir" value="${basedir}"/>
+        <condition property="no.deps">
+            <and>
+                <istrue value="${no.dependencies}"/>
+            </and>
+        </condition>
+        <property name="javac.debug" value="true"/>
+        <property name="javadoc.preview" value="true"/>
+        <property name="application.args" value=""/>
+        <property name="source.encoding" value="${file.encoding}"/>
+        <property name="runtime.encoding" value="${source.encoding}"/>
+        <condition property="javadoc.encoding.used" value="${javadoc.encoding}">
+            <and>
+                <isset property="javadoc.encoding"/>
+                <not>
+                    <equals arg1="${javadoc.encoding}" arg2=""/>
+                </not>
+            </and>
+        </condition>
+        <property name="javadoc.encoding.used" value="${source.encoding}"/>
+        <property name="includes" value="**"/>
+        <property name="excludes" value=""/>
+        <property name="do.depend" value="false"/>
+        <condition property="do.depend.true">
+            <istrue value="${do.depend}"/>
+        </condition>
+        <path id="endorsed.classpath.path" path="${endorsed.classpath}"/>
+        <condition else="" property="endorsed.classpath.cmd.line.arg" value="-Xbootclasspath/p:'${toString:endorsed.classpath.path}'">
+            <and>
+                <isset property="endorsed.classpath"/>
+                <not>
+                    <equals arg1="${endorsed.classpath}" arg2="" trim="true"/>
+                </not>
+            </and>
+        </condition>
+        <condition else="" property="javac.profile.cmd.line.arg" value="-profile ${javac.profile}">
+            <isset property="profile.available"/>
+        </condition>
+        <condition else="false" property="jdkBug6558476">
+            <and>
+                <matches pattern="1\.[56]" string="${java.specification.version}"/>
+                <not>
+                    <os family="unix"/>
+                </not>
+            </and>
+        </condition>
+        <property name="javac.fork" value="${jdkBug6558476}"/>
+        <property name="jar.index" value="false"/>
+        <property name="jar.index.metainf" value="${jar.index}"/>
+        <property name="copylibs.rebase" value="true"/>
+        <available file="${meta.inf.dir}/persistence.xml" property="has.persistence.xml"/>
+        <condition property="junit.available">
+            <or>
+                <available classname="org.junit.Test" classpath="${run.test.classpath}"/>
+                <available classname="junit.framework.Test" classpath="${run.test.classpath}"/>
+            </or>
+        </condition>
+        <condition property="testng.available">
+            <available classname="org.testng.annotations.Test" classpath="${run.test.classpath}"/>
+        </condition>
+        <condition property="junit+testng.available">
+            <and>
+                <istrue value="${junit.available}"/>
+                <istrue value="${testng.available}"/>
+            </and>
+        </condition>
+        <condition else="testng" property="testng.mode" value="mixed">
+            <istrue value="${junit+testng.available}"/>
+        </condition>
+        <condition else="" property="testng.debug.mode" value="-mixed">
+            <istrue value="${junit+testng.available}"/>
+        </condition>
+    </target>
+    <target name="-post-init">
+        <!-- Empty placeholder for easier customization. -->
+        <!-- You can override this target in the ../build.xml file. -->
+    </target>
+    <target depends="-pre-init,-init-private,-init-user,-init-project,-do-init" name="-init-check">
+        <fail unless="src.dir">Must set src.dir</fail>
+        <fail unless="test.src.dir">Must set test.src.dir</fail>
+        <fail unless="build.dir">Must set build.dir</fail>
+        <fail unless="dist.dir">Must set dist.dir</fail>
+        <fail unless="build.classes.dir">Must set build.classes.dir</fail>
+        <fail unless="dist.javadoc.dir">Must set dist.javadoc.dir</fail>
+        <fail unless="build.test.classes.dir">Must set build.test.classes.dir</fail>
+        <fail unless="build.test.results.dir">Must set build.test.results.dir</fail>
+        <fail unless="build.classes.excludes">Must set build.classes.excludes</fail>
+        <fail unless="dist.jar">Must set dist.jar</fail>
+    </target>
+    <target name="-init-macrodef-property">
+        <macrodef name="property" uri="http://www.netbeans.org/ns/j2se-project/1">
+            <attribute name="name"/>
+            <attribute name="value"/>
+            <sequential>
+                <property name="@{name}" value="${@{value}}"/>
+            </sequential>
+        </macrodef>
+    </target>
+    <target depends="-init-ap-cmdline-properties" if="ap.supported.internal" name="-init-macrodef-javac-with-processors">
+        <macrodef name="javac" uri="http://www.netbeans.org/ns/j2se-project/3">
+            <attribute default="${src.dir}" name="srcdir"/>
+            <attribute default="${build.classes.dir}" name="destdir"/>
+            <attribute default="${javac.classpath}" name="classpath"/>
+            <attribute default="${javac.processorpath}" name="processorpath"/>
+            <attribute default="${build.generated.sources.dir}/ap-source-output" name="apgeneratedsrcdir"/>
+            <attribute default="${includes}" name="includes"/>
+            <attribute default="${excludes}" name="excludes"/>
+            <attribute default="${javac.debug}" name="debug"/>
+            <attribute default="${empty.dir}" name="sourcepath"/>
+            <attribute default="${empty.dir}" name="gensrcdir"/>
+            <element name="customize" optional="true"/>
+            <sequential>
+                <property location="${build.dir}/empty" name="empty.dir"/>
+                <mkdir dir="${empty.dir}"/>
+                <mkdir dir="@{apgeneratedsrcdir}"/>
+                <javac debug="@{debug}" deprecation="${javac.deprecation}" destdir="@{destdir}" encoding="${source.encoding}" excludes="@{excludes}" fork="${javac.fork}" includeantruntime="false" includes="@{includes}" source="${javac.source}" sourcepath="@{sourcepath}" srcdir="@{srcdir}" target="${javac.target}" tempdir="${java.io.tmpdir}">
+                    <src>
+                        <dirset dir="@{gensrcdir}" erroronmissingdir="false">
+                            <include name="*"/>
+                        </dirset>
+                    </src>
+                    <classpath>
+                        <path path="@{classpath}"/>
+                    </classpath>
+                    <compilerarg line="${endorsed.classpath.cmd.line.arg}"/>
+                    <compilerarg line="${javac.profile.cmd.line.arg}"/>
+                    <compilerarg line="${javac.compilerargs}"/>
+                    <compilerarg value="-processorpath"/>
+                    <compilerarg path="@{processorpath}:${empty.dir}"/>
+                    <compilerarg line="${ap.processors.internal}"/>
+                    <compilerarg line="${annotation.processing.processor.options}"/>
+                    <compilerarg value="-s"/>
+                    <compilerarg path="@{apgeneratedsrcdir}"/>
+                    <compilerarg line="${ap.proc.none.internal}"/>
+                    <customize/>
+                </javac>
+            </sequential>
+        </macrodef>
+    </target>
+    <target depends="-init-ap-cmdline-properties" name="-init-macrodef-javac-without-processors" unless="ap.supported.internal">
+        <macrodef name="javac" uri="http://www.netbeans.org/ns/j2se-project/3">
+            <attribute default="${src.dir}" name="srcdir"/>
+            <attribute default="${build.classes.dir}" name="destdir"/>
+            <attribute default="${javac.classpath}" name="classpath"/>
+            <attribute default="${javac.processorpath}" name="processorpath"/>
+            <attribute default="${build.generated.sources.dir}/ap-source-output" name="apgeneratedsrcdir"/>
+            <attribute default="${includes}" name="includes"/>
+            <attribute default="${excludes}" name="excludes"/>
+            <attribute default="${javac.debug}" name="debug"/>
+            <attribute default="${empty.dir}" name="sourcepath"/>
+            <attribute default="${empty.dir}" name="gensrcdir"/>
+            <element name="customize" optional="true"/>
+            <sequential>
+                <property location="${build.dir}/empty" name="empty.dir"/>
+                <mkdir dir="${empty.dir}"/>
+                <javac debug="@{debug}" deprecation="${javac.deprecation}" destdir="@{destdir}" encoding="${source.encoding}" excludes="@{excludes}" fork="${javac.fork}" includeantruntime="false" includes="@{includes}" source="${javac.source}" sourcepath="@{sourcepath}" srcdir="@{srcdir}" target="${javac.target}" tempdir="${java.io.tmpdir}">
+                    <src>
+                        <dirset dir="@{gensrcdir}" erroronmissingdir="false">
+                            <include name="*"/>
+                        </dirset>
+                    </src>
+                    <classpath>
+                        <path path="@{classpath}"/>
+                    </classpath>
+                    <compilerarg line="${endorsed.classpath.cmd.line.arg}"/>
+                    <compilerarg line="${javac.profile.cmd.line.arg}"/>
+                    <compilerarg line="${javac.compilerargs}"/>
+                    <customize/>
+                </javac>
+            </sequential>
+        </macrodef>
+    </target>
+    <target depends="-init-macrodef-javac-with-processors,-init-macrodef-javac-without-processors" name="-init-macrodef-javac">
+        <macrodef name="depend" uri="http://www.netbeans.org/ns/j2se-project/3">
+            <attribute default="${src.dir}" name="srcdir"/>
+            <attribute default="${build.classes.dir}" name="destdir"/>
+            <attribute default="${javac.classpath}" name="classpath"/>
+            <sequential>
+                <depend cache="${build.dir}/depcache" destdir="@{destdir}" excludes="${excludes}" includes="${includes}" srcdir="@{srcdir}">
+                    <classpath>
+                        <path path="@{classpath}"/>
+                    </classpath>
+                </depend>
+            </sequential>
+        </macrodef>
+        <macrodef name="force-recompile" uri="http://www.netbeans.org/ns/j2se-project/3">
+            <attribute default="${build.classes.dir}" name="destdir"/>
+            <sequential>
+                <fail unless="javac.includes">Must set javac.includes</fail>
+                <pathconvert pathsep="${line.separator}" property="javac.includes.binary">
+                    <path>
+                        <filelist dir="@{destdir}" files="${javac.includes}"/>
+                    </path>
+                    <globmapper from="*.java" to="*.class"/>
+                </pathconvert>
+                <tempfile deleteonexit="true" property="javac.includesfile.binary"/>
+                <echo file="${javac.includesfile.binary}" message="${javac.includes.binary}"/>
+                <delete>
+                    <files includesfile="${javac.includesfile.binary}"/>
+                </delete>
+                <delete>
+                    <fileset file="${javac.includesfile.binary}"/>
+                </delete>
+            </sequential>
+        </macrodef>
+    </target>
+    <target if="${junit.available}" name="-init-macrodef-junit-init">
+        <condition else="false" property="nb.junit.batch" value="true">
+            <and>
+                <istrue value="${junit.available}"/>
+                <not>
+                    <isset property="test.method"/>
+                </not>
+            </and>
+        </condition>
+        <condition else="false" property="nb.junit.single" value="true">
+            <and>
+                <istrue value="${junit.available}"/>
+                <isset property="test.method"/>
+            </and>
+        </condition>
+    </target>
+    <target name="-init-test-properties">
+        <property name="test.binaryincludes" value="&lt;nothing&gt;"/>
+        <property name="test.binarytestincludes" value=""/>
+        <property name="test.binaryexcludes" value=""/>
+    </target>
+    <target if="${nb.junit.single}" name="-init-macrodef-junit-single" unless="${nb.junit.batch}">
+        <macrodef name="junit" uri="http://www.netbeans.org/ns/j2se-project/3">
+            <attribute default="${includes}" name="includes"/>
+            <attribute default="${excludes}" name="excludes"/>
+            <attribute default="**" name="testincludes"/>
+            <attribute default="" name="testmethods"/>
+            <element name="customize" optional="true"/>
+            <sequential>
+                <property name="junit.forkmode" value="perTest"/>
+                <junit dir="${work.dir}" errorproperty="tests.failed" failureproperty="tests.failed" fork="true" forkmode="${junit.forkmode}" showoutput="true" tempdir="${build.dir}">
+                    <test methods="@{testmethods}" name="@{testincludes}" todir="${build.test.results.dir}"/>
+                    <syspropertyset>
+                        <propertyref prefix="test-sys-prop."/>
+                        <mapper from="test-sys-prop.*" to="*" type="glob"/>
+                    </syspropertyset>
+                    <formatter type="brief" usefile="false"/>
+                    <formatter type="xml"/>
+                    <jvmarg value="-ea"/>
+                    <customize/>
+                </junit>
+            </sequential>
+        </macrodef>
+    </target>
+    <target depends="-init-test-properties" if="${nb.junit.batch}" name="-init-macrodef-junit-batch" unless="${nb.junit.single}">
+        <macrodef name="junit" uri="http://www.netbeans.org/ns/j2se-project/3">
+            <attribute default="${includes}" name="includes"/>
+            <attribute default="${excludes}" name="excludes"/>
+            <attribute default="**" name="testincludes"/>
+            <attribute default="" name="testmethods"/>
+            <element name="customize" optional="true"/>
+            <sequential>
+                <property name="junit.forkmode" value="perTest"/>
+                <junit dir="${work.dir}" errorproperty="tests.failed" failureproperty="tests.failed" fork="true" forkmode="${junit.forkmode}" showoutput="true" tempdir="${build.dir}">
+                    <batchtest todir="${build.test.results.dir}">
+                        <fileset dir="${test.src.dir}" excludes="@{excludes},${excludes}" includes="@{includes}">
+                            <filename name="@{testincludes}"/>
+                        </fileset>
+                        <fileset dir="${build.test.classes.dir}" excludes="@{excludes},${excludes},${test.binaryexcludes}" includes="${test.binaryincludes}">
+                            <filename name="${test.binarytestincludes}"/>
+                        </fileset>
+                    </batchtest>
+                    <syspropertyset>
+                        <propertyref prefix="test-sys-prop."/>
+                        <mapper from="test-sys-prop.*" to="*" type="glob"/>
+                    </syspropertyset>
+                    <formatter type="brief" usefile="false"/>
+                    <formatter type="xml"/>
+                    <jvmarg value="-ea"/>
+                    <customize/>
+                </junit>
+            </sequential>
+        </macrodef>
+    </target>
+    <target depends="-init-macrodef-junit-init,-init-macrodef-junit-single, -init-macrodef-junit-batch" if="${junit.available}" name="-init-macrodef-junit"/>
+    <target if="${testng.available}" name="-init-macrodef-testng">
+        <macrodef name="testng" uri="http://www.netbeans.org/ns/j2se-project/3">
+            <attribute default="${includes}" name="includes"/>
+            <attribute default="${excludes}" name="excludes"/>
+            <attribute default="**" name="testincludes"/>
+            <attribute default="" name="testmethods"/>
+            <element name="customize" optional="true"/>
+            <sequential>
+                <condition else="" property="testng.methods.arg" value="@{testincludes}.@{testmethods}">
+                    <isset property="test.method"/>
+                </condition>
+                <union id="test.set">
+                    <fileset dir="${test.src.dir}" excludes="@{excludes},**/*.xml,${excludes}" includes="@{includes}">
+                        <filename name="@{testincludes}"/>
+                    </fileset>
+                </union>
+                <taskdef classname="org.testng.TestNGAntTask" classpath="${run.test.classpath}" name="testng"/>
+                <testng classfilesetref="test.set" failureProperty="tests.failed" listeners="org.testng.reporters.VerboseReporter" methods="${testng.methods.arg}" mode="${testng.mode}" outputdir="${build.test.results.dir}" suitename="pryDemo" testname="TestNG tests" workingDir="${work.dir}">
+                    <xmlfileset dir="${build.test.classes.dir}" includes="@{testincludes}"/>
+                    <propertyset>
+                        <propertyref prefix="test-sys-prop."/>
+                        <mapper from="test-sys-prop.*" to="*" type="glob"/>
+                    </propertyset>
+                    <customize/>
+                </testng>
+            </sequential>
+        </macrodef>
+    </target>
+    <target name="-init-macrodef-test-impl">
+        <macrodef name="test-impl" uri="http://www.netbeans.org/ns/j2se-project/3">
+            <attribute default="${includes}" name="includes"/>
+            <attribute default="${excludes}" name="excludes"/>
+            <attribute default="**" name="testincludes"/>
+            <attribute default="" name="testmethods"/>
+            <element implicit="true" name="customize" optional="true"/>
+            <sequential>
+                <echo>No tests executed.</echo>
+            </sequential>
+        </macrodef>
+    </target>
+    <target depends="-init-macrodef-junit" if="${junit.available}" name="-init-macrodef-junit-impl">
+        <macrodef name="test-impl" uri="http://www.netbeans.org/ns/j2se-project/3">
+            <attribute default="${includes}" name="includes"/>
+            <attribute default="${excludes}" name="excludes"/>
+            <attribute default="**" name="testincludes"/>
+            <attribute default="" name="testmethods"/>
+            <element implicit="true" name="customize" optional="true"/>
+            <sequential>
+                <j2seproject3:junit excludes="@{excludes}" includes="@{includes}" testincludes="@{testincludes}" testmethods="@{testmethods}">
+                    <customize/>
+                </j2seproject3:junit>
+            </sequential>
+        </macrodef>
+    </target>
+    <target depends="-init-macrodef-testng" if="${testng.available}" name="-init-macrodef-testng-impl">
+        <macrodef name="test-impl" uri="http://www.netbeans.org/ns/j2se-project/3">
+            <attribute default="${includes}" name="includes"/>
+            <attribute default="${excludes}" name="excludes"/>
+            <attribute default="**" name="testincludes"/>
+            <attribute default="" name="testmethods"/>
+            <element implicit="true" name="customize" optional="true"/>
+            <sequential>
+                <j2seproject3:testng excludes="@{excludes}" includes="@{includes}" testincludes="@{testincludes}" testmethods="@{testmethods}">
+                    <customize/>
+                </j2seproject3:testng>
+            </sequential>
+        </macrodef>
+    </target>
+    <target depends="-init-macrodef-test-impl,-init-macrodef-junit-impl,-init-macrodef-testng-impl" name="-init-macrodef-test">
+        <macrodef name="test" uri="http://www.netbeans.org/ns/j2se-project/3">
+            <attribute default="${includes}" name="includes"/>
+            <attribute default="${excludes}" name="excludes"/>
+            <attribute default="**" name="testincludes"/>
+            <attribute default="" name="testmethods"/>
+            <sequential>
+                <j2seproject3:test-impl excludes="@{excludes}" includes="@{includes}" testincludes="@{testincludes}" testmethods="@{testmethods}">
+                    <customize>
+                        <classpath>
+                            <path path="${run.test.classpath}"/>
+                        </classpath>
+                        <jvmarg line="${endorsed.classpath.cmd.line.arg}"/>
+                        <jvmarg line="${run.jvmargs}"/>
+                        <jvmarg line="${run.jvmargs.ide}"/>
+                    </customize>
+                </j2seproject3:test-impl>
+            </sequential>
+        </macrodef>
+    </target>
+    <target if="${junit.available}" name="-init-macrodef-junit-debug" unless="${nb.junit.batch}">
+        <macrodef name="junit-debug" uri="http://www.netbeans.org/ns/j2se-project/3">
+            <attribute default="${includes}" name="includes"/>
+            <attribute default="${excludes}" name="excludes"/>
+            <attribute default="**" name="testincludes"/>
+            <attribute default="" name="testmethods"/>
+            <element name="customize" optional="true"/>
+            <sequential>
+                <property name="junit.forkmode" value="perTest"/>
+                <junit dir="${work.dir}" errorproperty="tests.failed" failureproperty="tests.failed" fork="true" forkmode="${junit.forkmode}" showoutput="true" tempdir="${build.dir}">
+                    <test methods="@{testmethods}" name="@{testincludes}" todir="${build.test.results.dir}"/>
+                    <syspropertyset>
+                        <propertyref prefix="test-sys-prop."/>
+                        <mapper from="test-sys-prop.*" to="*" type="glob"/>
+                    </syspropertyset>
+                    <formatter type="brief" usefile="false"/>
+                    <formatter type="xml"/>
+                    <jvmarg value="-ea"/>
+                    <jvmarg line="${debug-args-line}"/>
+                    <jvmarg value="-Xrunjdwp:transport=${debug-transport},address=${jpda.address}"/>
+                    <customize/>
+                </junit>
+            </sequential>
+        </macrodef>
+    </target>
+    <target depends="-init-test-properties" if="${nb.junit.batch}" name="-init-macrodef-junit-debug-batch">
+        <macrodef name="junit-debug" uri="http://www.netbeans.org/ns/j2se-project/3">
+            <attribute default="${includes}" name="includes"/>
+            <attribute default="${excludes}" name="excludes"/>
+            <attribute default="**" name="testincludes"/>
+            <attribute default="" name="testmethods"/>
+            <element name="customize" optional="true"/>
+            <sequential>
+                <property name="junit.forkmode" value="perTest"/>
+                <junit dir="${work.dir}" errorproperty="tests.failed" failureproperty="tests.failed" fork="true" forkmode="${junit.forkmode}" showoutput="true" tempdir="${build.dir}">
+                    <batchtest todir="${build.test.results.dir}">
+                        <fileset dir="${test.src.dir}" excludes="@{excludes},${excludes}" includes="@{includes}">
+                            <filename name="@{testincludes}"/>
+                        </fileset>
+                        <fileset dir="${build.test.classes.dir}" excludes="@{excludes},${excludes},${test.binaryexcludes}" includes="${test.binaryincludes}">
+                            <filename name="${test.binarytestincludes}"/>
+                        </fileset>
+                    </batchtest>
+                    <syspropertyset>
+                        <propertyref prefix="test-sys-prop."/>
+                        <mapper from="test-sys-prop.*" to="*" type="glob"/>
+                    </syspropertyset>
+                    <formatter type="brief" usefile="false"/>
+                    <formatter type="xml"/>
+                    <jvmarg value="-ea"/>
+                    <jvmarg line="${debug-args-line}"/>
+                    <jvmarg value="-Xrunjdwp:transport=${debug-transport},address=${jpda.address}"/>
+                    <customize/>
+                </junit>
+            </sequential>
+        </macrodef>
+    </target>
+    <target depends="-init-macrodef-junit-debug,-init-macrodef-junit-debug-batch" if="${junit.available}" name="-init-macrodef-junit-debug-impl">
+        <macrodef name="test-debug-impl" uri="http://www.netbeans.org/ns/j2se-project/3">
+            <attribute default="${includes}" name="includes"/>
+            <attribute default="${excludes}" name="excludes"/>
+            <attribute default="**" name="testincludes"/>
+            <attribute default="" name="testmethods"/>
+            <element implicit="true" name="customize" optional="true"/>
+            <sequential>
+                <j2seproject3:junit-debug excludes="@{excludes}" includes="@{includes}" testincludes="@{testincludes}" testmethods="@{testmethods}">
+                    <customize/>
+                </j2seproject3:junit-debug>
+            </sequential>
+        </macrodef>
+    </target>
+    <target if="${testng.available}" name="-init-macrodef-testng-debug">
+        <macrodef name="testng-debug" uri="http://www.netbeans.org/ns/j2se-project/3">
+            <attribute default="${main.class}" name="testClass"/>
+            <attribute default="" name="testMethod"/>
+            <element name="customize2" optional="true"/>
+            <sequential>
+                <condition else="-testclass @{testClass}" property="test.class.or.method" value="-methods @{testClass}.@{testMethod}">
+                    <isset property="test.method"/>
+                </condition>
+                <condition else="-suitename pryDemo -testname @{testClass} ${test.class.or.method}" property="testng.cmd.args" value="@{testClass}">
+                    <matches pattern=".*\.xml" string="@{testClass}"/>
+                </condition>
+                <delete dir="${build.test.results.dir}" quiet="true"/>
+                <mkdir dir="${build.test.results.dir}"/>
+                <j2seproject3:debug classname="org.testng.TestNG" classpath="${debug.test.classpath}">
+                    <customize>
+                        <customize2/>
+                        <jvmarg value="-ea"/>
+                        <arg line="${testng.debug.mode}"/>
+                        <arg line="-d ${build.test.results.dir}"/>
+                        <arg line="-listener org.testng.reporters.VerboseReporter"/>
+                        <arg line="${testng.cmd.args}"/>
+                    </customize>
+                </j2seproject3:debug>
+            </sequential>
+        </macrodef>
+    </target>
+    <target depends="-init-macrodef-testng-debug" if="${testng.available}" name="-init-macrodef-testng-debug-impl">
+        <macrodef name="testng-debug-impl" uri="http://www.netbeans.org/ns/j2se-project/3">
+            <attribute default="${main.class}" name="testClass"/>
+            <attribute default="" name="testMethod"/>
+            <element implicit="true" name="customize2" optional="true"/>
+            <sequential>
+                <j2seproject3:testng-debug testClass="@{testClass}" testMethod="@{testMethod}">
+                    <customize2/>
+                </j2seproject3:testng-debug>
+            </sequential>
+        </macrodef>
+    </target>
+    <target depends="-init-macrodef-junit-debug-impl" if="${junit.available}" name="-init-macrodef-test-debug-junit">
+        <macrodef name="test-debug" uri="http://www.netbeans.org/ns/j2se-project/3">
+            <attribute default="${includes}" name="includes"/>
+            <attribute default="${excludes}" name="excludes"/>
+            <attribute default="**" name="testincludes"/>
+            <attribute default="" name="testmethods"/>
+            <attribute default="${main.class}" name="testClass"/>
+            <attribute default="" name="testMethod"/>
+            <sequential>
+                <j2seproject3:test-debug-impl excludes="@{excludes}" includes="@{includes}" testincludes="@{testincludes}" testmethods="@{testmethods}">
+                    <customize>
+                        <classpath>
+                            <path path="${run.test.classpath}"/>
+                        </classpath>
+                        <jvmarg line="${endorsed.classpath.cmd.line.arg}"/>
+                        <jvmarg line="${run.jvmargs}"/>
+                        <jvmarg line="${run.jvmargs.ide}"/>
+                    </customize>
+                </j2seproject3:test-debug-impl>
+            </sequential>
+        </macrodef>
+    </target>
+    <target depends="-init-macrodef-testng-debug-impl" if="${testng.available}" name="-init-macrodef-test-debug-testng">
+        <macrodef name="test-debug" uri="http://www.netbeans.org/ns/j2se-project/3">
+            <attribute default="${includes}" name="includes"/>
+            <attribute default="${excludes}" name="excludes"/>
+            <attribute default="**" name="testincludes"/>
+            <attribute default="" name="testmethods"/>
+            <attribute default="${main.class}" name="testClass"/>
+            <attribute default="" name="testMethod"/>
+            <sequential>
+                <j2seproject3:testng-debug-impl testClass="@{testClass}" testMethod="@{testMethod}">
+                    <customize2>
+                        <syspropertyset>
+                            <propertyref prefix="test-sys-prop."/>
+                            <mapper from="test-sys-prop.*" to="*" type="glob"/>
+                        </syspropertyset>
+                    </customize2>
+                </j2seproject3:testng-debug-impl>
+            </sequential>
+        </macrodef>
+    </target>
+    <target depends="-init-macrodef-test-debug-junit,-init-macrodef-test-debug-testng" name="-init-macrodef-test-debug"/>
+    <!--
+                pre NB7.2 profiling section; consider it deprecated
+            -->
+    <target depends="-profile-pre-init, init, -profile-post-init, -profile-init-macrodef-profile, -profile-init-check" if="profiler.info.jvmargs.agent" name="profile-init"/>
+    <target if="profiler.info.jvmargs.agent" name="-profile-pre-init">
+        <!-- Empty placeholder for easier customization. -->
+        <!-- You can override this target in the ../build.xml file. -->
+    </target>
+    <target if="profiler.info.jvmargs.agent" name="-profile-post-init">
+        <!-- Empty placeholder for easier customization. -->
+        <!-- You can override this target in the ../build.xml file. -->
+    </target>
+    <target if="profiler.info.jvmargs.agent" name="-profile-init-macrodef-profile">
+        <macrodef name="resolve">
+            <attribute name="name"/>
+            <attribute name="value"/>
+            <sequential>
+                <property name="@{name}" value="${env.@{value}}"/>
+            </sequential>
+        </macrodef>
+        <macrodef name="profile">
+            <attribute default="${main.class}" name="classname"/>
+            <element name="customize" optional="true"/>
+            <sequential>
+                <property environment="env"/>
+                <resolve name="profiler.current.path" value="${profiler.info.pathvar}"/>
+                <java classname="@{classname}" dir="${profiler.info.dir}" fork="true" jvm="${profiler.info.jvm}">
+                    <jvmarg line="${endorsed.classpath.cmd.line.arg}"/>
+                    <jvmarg value="${profiler.info.jvmargs.agent}"/>
+                    <jvmarg line="${profiler.info.jvmargs}"/>
+                    <env key="${profiler.info.pathvar}" path="${profiler.info.agentpath}:${profiler.current.path}"/>
+                    <arg line="${application.args}"/>
+                    <classpath>
+                        <path path="${run.classpath}"/>
+                    </classpath>
+                    <syspropertyset>
+                        <propertyref prefix="run-sys-prop."/>
+                        <mapper from="run-sys-prop.*" to="*" type="glob"/>
+                    </syspropertyset>
+                    <customize/>
+                </java>
+            </sequential>
+        </macrodef>
+    </target>
+    <target depends="-profile-pre-init, init, -profile-post-init, -profile-init-macrodef-profile" if="profiler.info.jvmargs.agent" name="-profile-init-check">
+        <fail unless="profiler.info.jvm">Must set JVM to use for profiling in profiler.info.jvm</fail>
+        <fail unless="profiler.info.jvmargs.agent">Must set profiler agent JVM arguments in profiler.info.jvmargs.agent</fail>
+    </target>
+    <!--
+                end of pre NB7.2 profiling section
+            -->
+    <target depends="-init-debug-args" name="-init-macrodef-nbjpda">
+        <macrodef name="nbjpdastart" uri="http://www.netbeans.org/ns/j2se-project/1">
+            <attribute default="${main.class}" name="name"/>
+            <attribute default="${debug.classpath}" name="classpath"/>
+            <attribute default="" name="stopclassname"/>
+            <sequential>
+                <nbjpdastart addressproperty="jpda.address" name="@{name}" stopclassname="@{stopclassname}" transport="${debug-transport}">
+                    <classpath>
+                        <path path="@{classpath}"/>
+                    </classpath>
+                </nbjpdastart>
+            </sequential>
+        </macrodef>
+        <macrodef name="nbjpdareload" uri="http://www.netbeans.org/ns/j2se-project/1">
+            <attribute default="${build.classes.dir}" name="dir"/>
+            <sequential>
+                <nbjpdareload>
+                    <fileset dir="@{dir}" includes="${fix.classes}">
+                        <include name="${fix.includes}*.class"/>
+                    </fileset>
+                </nbjpdareload>
+            </sequential>
+        </macrodef>
+    </target>
+    <target name="-init-debug-args">
+        <property name="version-output" value="java version &quot;${ant.java.version}"/>
+        <condition property="have-jdk-older-than-1.4">
+            <or>
+                <contains string="${version-output}" substring="java version &quot;1.0"/>
+                <contains string="${version-output}" substring="java version &quot;1.1"/>
+                <contains string="${version-output}" substring="java version &quot;1.2"/>
+                <contains string="${version-output}" substring="java version &quot;1.3"/>
+            </or>
+        </condition>
+        <condition else="-Xdebug" property="debug-args-line" value="-Xdebug -Xnoagent -Djava.compiler=none">
+            <istrue value="${have-jdk-older-than-1.4}"/>
+        </condition>
+        <condition else="dt_socket" property="debug-transport-by-os" value="dt_shmem">
+            <os family="windows"/>
+        </condition>
+        <condition else="${debug-transport-by-os}" property="debug-transport" value="${debug.transport}">
+            <isset property="debug.transport"/>
+        </condition>
+    </target>
+    <target depends="-init-debug-args" name="-init-macrodef-debug">
+        <macrodef name="debug" uri="http://www.netbeans.org/ns/j2se-project/3">
+            <attribute default="${main.class}" name="classname"/>
+            <attribute default="${debug.classpath}" name="classpath"/>
+            <element name="customize" optional="true"/>
+            <sequential>
+                <java classname="@{classname}" dir="${work.dir}" fork="true">
+                    <jvmarg line="${endorsed.classpath.cmd.line.arg}"/>
+                    <jvmarg line="${debug-args-line}"/>
+                    <jvmarg value="-Xrunjdwp:transport=${debug-transport},address=${jpda.address}"/>
+                    <jvmarg value="-Dfile.encoding=${runtime.encoding}"/>
+                    <redirector errorencoding="${runtime.encoding}" inputencoding="${runtime.encoding}" outputencoding="${runtime.encoding}"/>
+                    <jvmarg line="${run.jvmargs}"/>
+                    <jvmarg line="${run.jvmargs.ide}"/>
+                    <classpath>
+                        <path path="@{classpath}"/>
+                    </classpath>
+                    <syspropertyset>
+                        <propertyref prefix="run-sys-prop."/>
+                        <mapper from="run-sys-prop.*" to="*" type="glob"/>
+                    </syspropertyset>
+                    <customize/>
+                </java>
+            </sequential>
+        </macrodef>
+    </target>
+    <target name="-init-macrodef-java">
+        <macrodef name="java" uri="http://www.netbeans.org/ns/j2se-project/1">
+            <attribute default="${main.class}" name="classname"/>
+            <attribute default="${run.classpath}" name="classpath"/>
+            <attribute default="jvm" name="jvm"/>
+            <element name="customize" optional="true"/>
+            <sequential>
+                <java classname="@{classname}" dir="${work.dir}" fork="true">
+                    <jvmarg line="${endorsed.classpath.cmd.line.arg}"/>
+                    <jvmarg value="-Dfile.encoding=${runtime.encoding}"/>
+                    <redirector errorencoding="${runtime.encoding}" inputencoding="${runtime.encoding}" outputencoding="${runtime.encoding}"/>
+                    <jvmarg line="${run.jvmargs}"/>
+                    <jvmarg line="${run.jvmargs.ide}"/>
+                    <classpath>
+                        <path path="@{classpath}"/>
+                    </classpath>
+                    <syspropertyset>
+                        <propertyref prefix="run-sys-prop."/>
+                        <mapper from="run-sys-prop.*" to="*" type="glob"/>
+                    </syspropertyset>
+                    <customize/>
+                </java>
+            </sequential>
+        </macrodef>
+    </target>
+    <target name="-init-macrodef-copylibs">
+        <macrodef name="copylibs" uri="http://www.netbeans.org/ns/j2se-project/3">
+            <attribute default="${manifest.file}" name="manifest"/>
+            <element name="customize" optional="true"/>
+            <sequential>
+                <property location="${build.classes.dir}" name="build.classes.dir.resolved"/>
+                <pathconvert property="run.classpath.without.build.classes.dir">
+                    <path path="${run.classpath}"/>
+                    <map from="${build.classes.dir.resolved}" to=""/>
+                </pathconvert>
+                <pathconvert pathsep=" " property="jar.classpath">
+                    <path path="${run.classpath.without.build.classes.dir}"/>
+                    <chainedmapper>
+                        <flattenmapper/>
+                        <filtermapper>
+                            <replacestring from=" " to="%20"/>
+                        </filtermapper>
+                        <globmapper from="*" to="lib/*"/>
+                    </chainedmapper>
+                </pathconvert>
+                <taskdef classname="org.netbeans.modules.java.j2seproject.copylibstask.CopyLibs" classpath="${libs.CopyLibs.classpath}" name="copylibs"/>
+                <copylibs compress="${jar.compress}" excludeFromCopy="${copylibs.excludes}" index="${jar.index}" indexMetaInf="${jar.index.metainf}" jarfile="${dist.jar}" manifest="@{manifest}" rebase="${copylibs.rebase}" runtimeclasspath="${run.classpath.without.build.classes.dir}">
+                    <fileset dir="${build.classes.dir}" excludes="${dist.archive.excludes}"/>
+                    <manifest>
+                        <attribute name="Class-Path" value="${jar.classpath}"/>
+                        <customize/>
+                    </manifest>
+                </copylibs>
+            </sequential>
+        </macrodef>
+    </target>
+    <target name="-init-presetdef-jar">
+        <presetdef name="jar" uri="http://www.netbeans.org/ns/j2se-project/1">
+            <jar compress="${jar.compress}" index="${jar.index}" jarfile="${dist.jar}">
+                <j2seproject1:fileset dir="${build.classes.dir}" excludes="${dist.archive.excludes}"/>
+            </jar>
+        </presetdef>
+    </target>
+    <target name="-init-ap-cmdline-properties">
+        <property name="annotation.processing.enabled" value="true"/>
+        <property name="annotation.processing.processors.list" value=""/>
+        <property name="annotation.processing.processor.options" value=""/>
+        <property name="annotation.processing.run.all.processors" value="true"/>
+        <property name="javac.processorpath" value="${javac.classpath}"/>
+        <property name="javac.test.processorpath" value="${javac.test.classpath}"/>
+        <condition property="ap.supported.internal" value="true">
+            <not>
+                <matches pattern="1\.[0-5](\..*)?" string="${javac.source}"/>
+            </not>
+        </condition>
+    </target>
+    <target depends="-init-ap-cmdline-properties" if="ap.supported.internal" name="-init-ap-cmdline-supported">
+        <condition else="" property="ap.processors.internal" value="-processor ${annotation.processing.processors.list}">
+            <isfalse value="${annotation.processing.run.all.processors}"/>
+        </condition>
+        <condition else="" property="ap.proc.none.internal" value="-proc:none">
+            <isfalse value="${annotation.processing.enabled}"/>
+        </condition>
+    </target>
+    <target depends="-init-ap-cmdline-properties,-init-ap-cmdline-supported" name="-init-ap-cmdline">
+        <property name="ap.cmd.line.internal" value=""/>
+    </target>
+    <target depends="-pre-init,-init-private,-init-user,-init-project,-do-init,-post-init,-init-check,-init-macrodef-property,-init-macrodef-javac,-init-macrodef-test,-init-macrodef-test-debug,-init-macrodef-nbjpda,-init-macrodef-debug,-init-macrodef-java,-init-presetdef-jar,-init-ap-cmdline" name="init"/>
+    <!--
+                ===================
+                COMPILATION SECTION
+                ===================
+            -->
+    <target name="-deps-jar-init" unless="built-jar.properties">
+        <property location="${build.dir}/built-jar.properties" name="built-jar.properties"/>
+        <delete file="${built-jar.properties}" quiet="true"/>
+    </target>
+    <target if="already.built.jar.${basedir}" name="-warn-already-built-jar">
+        <echo level="warn" message="Cycle detected: pryDemo was already built"/>
+    </target>
+    <target depends="init,-deps-jar-init" name="deps-jar" unless="no.deps">
+        <mkdir dir="${build.dir}"/>
+        <touch file="${built-jar.properties}" verbose="false"/>
+        <property file="${built-jar.properties}" prefix="already.built.jar."/>
+        <antcall target="-warn-already-built-jar"/>
+        <propertyfile file="${built-jar.properties}">
+            <entry key="${basedir}" value=""/>
+        </propertyfile>
+    </target>
+    <target depends="init,-check-automatic-build,-clean-after-automatic-build" name="-verify-automatic-build"/>
+    <target depends="init" name="-check-automatic-build">
+        <available file="${build.classes.dir}/.netbeans_automatic_build" property="netbeans.automatic.build"/>
+    </target>
+    <target depends="init" if="netbeans.automatic.build" name="-clean-after-automatic-build">
+        <antcall target="clean"/>
+    </target>
+    <target depends="init,deps-jar" name="-pre-pre-compile">
+        <mkdir dir="${build.classes.dir}"/>
+    </target>
+    <target name="-pre-compile">
+        <!-- Empty placeholder for easier customization. -->
+        <!-- You can override this target in the ../build.xml file. -->
+    </target>
+    <target if="do.depend.true" name="-compile-depend">
+        <pathconvert property="build.generated.subdirs">
+            <dirset dir="${build.generated.sources.dir}" erroronmissingdir="false">
+                <include name="*"/>
+            </dirset>
+        </pathconvert>
+        <j2seproject3:depend srcdir="${src.dir}:${build.generated.subdirs}"/>
+    </target>
+    <target depends="init,deps-jar,-pre-pre-compile,-pre-compile, -copy-persistence-xml,-compile-depend" if="have.sources" name="-do-compile">
+        <j2seproject3:javac gensrcdir="${build.generated.sources.dir}"/>
+        <copy todir="${build.classes.dir}">
+            <fileset dir="${src.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
+        </copy>
+    </target>
+    <target if="has.persistence.xml" name="-copy-persistence-xml">
+        <mkdir dir="${build.classes.dir}/META-INF"/>
+        <copy todir="${build.classes.dir}/META-INF">
+            <fileset dir="${meta.inf.dir}" includes="persistence.xml orm.xml"/>
+        </copy>
+    </target>
+    <target name="-post-compile">
+        <!-- Empty placeholder for easier customization. -->
+        <!-- You can override this target in the ../build.xml file. -->
+    </target>
+    <target depends="init,deps-jar,-verify-automatic-build,-pre-pre-compile,-pre-compile,-do-compile,-post-compile" description="Compile project." name="compile"/>
+    <target name="-pre-compile-single">
+        <!-- Empty placeholder for easier customization. -->
+        <!-- You can override this target in the ../build.xml file. -->
+    </target>
+    <target depends="init,deps-jar,-pre-pre-compile" name="-do-compile-single">
+        <fail unless="javac.includes">Must select some files in the IDE or set javac.includes</fail>
+        <j2seproject3:force-recompile/>
+        <j2seproject3:javac excludes="" gensrcdir="${build.generated.sources.dir}" includes="${javac.includes}" sourcepath="${src.dir}"/>
+    </target>
+    <target name="-post-compile-single">
+        <!-- Empty placeholder for easier customization. -->
+        <!-- You can override this target in the ../build.xml file. -->
+    </target>
+    <target depends="init,deps-jar,-verify-automatic-build,-pre-pre-compile,-pre-compile-single,-do-compile-single,-post-compile-single" name="compile-single"/>
+    <!--
+                ====================
+                JAR BUILDING SECTION
+                ====================
+            -->
+    <target depends="init" name="-pre-pre-jar">
+        <dirname file="${dist.jar}" property="dist.jar.dir"/>
+        <mkdir dir="${dist.jar.dir}"/>
+    </target>
+    <target name="-pre-jar">
+        <!-- Empty placeholder for easier customization. -->
+        <!-- You can override this target in the ../build.xml file. -->
+    </target>
+    <target depends="init" if="do.archive" name="-do-jar-create-manifest" unless="manifest.available">
+        <tempfile deleteonexit="true" destdir="${build.dir}" property="tmp.manifest.file"/>
+        <touch file="${tmp.manifest.file}" verbose="false"/>
+    </target>
+    <target depends="init" if="do.archive+manifest.available" name="-do-jar-copy-manifest">
+        <tempfile deleteonexit="true" destdir="${build.dir}" property="tmp.manifest.file"/>
+        <copy file="${manifest.file}" tofile="${tmp.manifest.file}"/>
+    </target>
+    <target depends="init,-do-jar-create-manifest,-do-jar-copy-manifest" if="do.archive+main.class.available" name="-do-jar-set-mainclass">
+        <manifest file="${tmp.manifest.file}" mode="update">
+            <attribute name="Main-Class" value="${main.class}"/>
+        </manifest>
+    </target>
+    <target depends="init,-do-jar-create-manifest,-do-jar-copy-manifest" if="do.archive+profile.available" name="-do-jar-set-profile">
+        <manifest file="${tmp.manifest.file}" mode="update">
+            <attribute name="Profile" value="${javac.profile}"/>
+        </manifest>
+    </target>
+    <target depends="init,-do-jar-create-manifest,-do-jar-copy-manifest" if="do.archive+splashscreen.available" name="-do-jar-set-splashscreen">
+        <basename file="${application.splash}" property="splashscreen.basename"/>
+        <mkdir dir="${build.classes.dir}/META-INF"/>
+        <copy failonerror="false" file="${application.splash}" todir="${build.classes.dir}/META-INF"/>
+        <manifest file="${tmp.manifest.file}" mode="update">
+            <attribute name="SplashScreen-Image" value="META-INF/${splashscreen.basename}"/>
+        </manifest>
+    </target>
+    <target depends="init,-init-macrodef-copylibs,compile,-pre-pre-jar,-pre-jar,-do-jar-create-manifest,-do-jar-copy-manifest,-do-jar-set-mainclass,-do-jar-set-profile,-do-jar-set-splashscreen" if="do.mkdist" name="-do-jar-copylibs">
+        <j2seproject3:copylibs manifest="${tmp.manifest.file}"/>
+        <echo level="info">To run this application from the command line without Ant, try:</echo>
+        <property location="${dist.jar}" name="dist.jar.resolved"/>
+        <echo level="info">java -jar "${dist.jar.resolved}"</echo>
+    </target>
+    <target depends="init,compile,-pre-pre-jar,-pre-jar,-do-jar-create-manifest,-do-jar-copy-manifest,-do-jar-set-mainclass,-do-jar-set-profile,-do-jar-set-splashscreen" if="do.archive" name="-do-jar-jar" unless="do.mkdist">
+        <j2seproject1:jar manifest="${tmp.manifest.file}"/>
+        <property location="${build.classes.dir}" name="build.classes.dir.resolved"/>
+        <property location="${dist.jar}" name="dist.jar.resolved"/>
+        <pathconvert property="run.classpath.with.dist.jar">
+            <path path="${run.classpath}"/>
+            <map from="${build.classes.dir.resolved}" to="${dist.jar.resolved}"/>
+        </pathconvert>
+        <condition else="" property="jar.usage.message" value="To run this application from the command line without Ant, try:${line.separator}${platform.java} -cp ${run.classpath.with.dist.jar} ${main.class}">
+            <isset property="main.class.available"/>
+        </condition>
+        <condition else="debug" property="jar.usage.level" value="info">
+            <isset property="main.class.available"/>
+        </condition>
+        <echo level="${jar.usage.level}" message="${jar.usage.message}"/>
+    </target>
+    <target depends="-do-jar-copylibs" if="do.archive" name="-do-jar-delete-manifest">
+        <delete>
+            <fileset file="${tmp.manifest.file}"/>
+        </delete>
+    </target>
+    <target depends="init,compile,-pre-pre-jar,-pre-jar,-do-jar-create-manifest,-do-jar-copy-manifest,-do-jar-set-mainclass,-do-jar-set-profile,-do-jar-set-splashscreen,-do-jar-jar,-do-jar-delete-manifest" name="-do-jar-without-libraries"/>
+    <target depends="init,compile,-pre-pre-jar,-pre-jar,-do-jar-create-manifest,-do-jar-copy-manifest,-do-jar-set-mainclass,-do-jar-set-profile,-do-jar-set-splashscreen,-do-jar-copylibs,-do-jar-delete-manifest" name="-do-jar-with-libraries"/>
+    <target name="-post-jar">
+        <!-- Empty placeholder for easier customization. -->
+        <!-- You can override this target in the ../build.xml file. -->
+    </target>
+    <target depends="init,compile,-pre-jar,-do-jar-without-libraries,-do-jar-with-libraries,-post-jar" name="-do-jar"/>
+    <target depends="init,compile,-pre-jar,-do-jar,-post-jar" description="Build JAR." name="jar"/>
+    <!--
+                =================
+                EXECUTION SECTION
+                =================
+            -->
+    <target depends="init,compile" description="Run a main class." name="run">
+        <j2seproject1:java>
+            <customize>
+                <arg line="${application.args}"/>
+            </customize>
+        </j2seproject1:java>
+    </target>
+    <target name="-do-not-recompile">
+        <property name="javac.includes.binary" value=""/>
+    </target>
+    <target depends="init,compile-single" name="run-single">
+        <fail unless="run.class">Must select one file in the IDE or set run.class</fail>
+        <j2seproject1:java classname="${run.class}"/>
+    </target>
+    <target depends="init,compile-test-single" name="run-test-with-main">
+        <fail unless="run.class">Must select one file in the IDE or set run.class</fail>
+        <j2seproject1:java classname="${run.class}" classpath="${run.test.classpath}"/>
+    </target>
+    <!--
+                =================
+                DEBUGGING SECTION
+                =================
+            -->
+    <target depends="init" if="netbeans.home" name="-debug-start-debugger">
+        <j2seproject1:nbjpdastart name="${debug.class}"/>
+    </target>
+    <target depends="init" if="netbeans.home" name="-debug-start-debugger-main-test">
+        <j2seproject1:nbjpdastart classpath="${debug.test.classpath}" name="${debug.class}"/>
+    </target>
+    <target depends="init,compile" name="-debug-start-debuggee">
+        <j2seproject3:debug>
+            <customize>
+                <arg line="${application.args}"/>
+            </customize>
+        </j2seproject3:debug>
+    </target>
+    <target depends="init,compile,-debug-start-debugger,-debug-start-debuggee" description="Debug project in IDE." if="netbeans.home" name="debug"/>
+    <target depends="init" if="netbeans.home" name="-debug-start-debugger-stepinto">
+        <j2seproject1:nbjpdastart stopclassname="${main.class}"/>
+    </target>
+    <target depends="init,compile,-debug-start-debugger-stepinto,-debug-start-debuggee" if="netbeans.home" name="debug-stepinto"/>
+    <target depends="init,compile-single" if="netbeans.home" name="-debug-start-debuggee-single">
+        <fail unless="debug.class">Must select one file in the IDE or set debug.class</fail>
+        <j2seproject3:debug classname="${debug.class}"/>
+    </target>
+    <target depends="init,compile-single,-debug-start-debugger,-debug-start-debuggee-single" if="netbeans.home" name="debug-single"/>
+    <target depends="init,compile-test-single" if="netbeans.home" name="-debug-start-debuggee-main-test">
+        <fail unless="debug.class">Must select one file in the IDE or set debug.class</fail>
+        <j2seproject3:debug classname="${debug.class}" classpath="${debug.test.classpath}"/>
+    </target>
+    <target depends="init,compile-test-single,-debug-start-debugger-main-test,-debug-start-debuggee-main-test" if="netbeans.home" name="debug-test-with-main"/>
+    <target depends="init" name="-pre-debug-fix">
+        <fail unless="fix.includes">Must set fix.includes</fail>
+        <property name="javac.includes" value="${fix.includes}.java"/>
+    </target>
+    <target depends="init,-pre-debug-fix,compile-single" if="netbeans.home" name="-do-debug-fix">
+        <j2seproject1:nbjpdareload/>
+    </target>
+    <target depends="init,-pre-debug-fix,-do-debug-fix" if="netbeans.home" name="debug-fix"/>
+    <!--
+                =================
+                PROFILING SECTION
+                =================
+            -->
+    <!--
+                pre NB7.2 profiler integration
+            -->
+    <target depends="profile-init,compile" description="Profile a project in the IDE." if="profiler.info.jvmargs.agent" name="-profile-pre72">
+        <fail unless="netbeans.home">This target only works when run from inside the NetBeans IDE.</fail>
+        <nbprofiledirect>
+            <classpath>
+                <path path="${run.classpath}"/>
+            </classpath>
+        </nbprofiledirect>
+        <profile/>
+    </target>
+    <target depends="profile-init,compile-single" description="Profile a selected class in the IDE." if="profiler.info.jvmargs.agent" name="-profile-single-pre72">
+        <fail unless="profile.class">Must select one file in the IDE or set profile.class</fail>
+        <fail unless="netbeans.home">This target only works when run from inside the NetBeans IDE.</fail>
+        <nbprofiledirect>
+            <classpath>
+                <path path="${run.classpath}"/>
+            </classpath>
+        </nbprofiledirect>
+        <profile classname="${profile.class}"/>
+    </target>
+    <target depends="profile-init,compile-single" if="profiler.info.jvmargs.agent" name="-profile-applet-pre72">
+        <fail unless="netbeans.home">This target only works when run from inside the NetBeans IDE.</fail>
+        <nbprofiledirect>
+            <classpath>
+                <path path="${run.classpath}"/>
+            </classpath>
+        </nbprofiledirect>
+        <profile classname="sun.applet.AppletViewer">
+            <customize>
+                <arg value="${applet.url}"/>
+            </customize>
+        </profile>
+    </target>
+    <target depends="profile-init,compile-test-single" if="profiler.info.jvmargs.agent" name="-profile-test-single-pre72">
+        <fail unless="netbeans.home">This target only works when run from inside the NetBeans IDE.</fail>
+        <nbprofiledirect>
+            <classpath>
+                <path path="${run.test.classpath}"/>
+            </classpath>
+        </nbprofiledirect>
+        <junit dir="${profiler.info.dir}" errorproperty="tests.failed" failureproperty="tests.failed" fork="true" jvm="${profiler.info.jvm}" showoutput="true">
+            <env key="${profiler.info.pathvar}" path="${profiler.info.agentpath}:${profiler.current.path}"/>
+            <jvmarg value="${profiler.info.jvmargs.agent}"/>
+            <jvmarg line="${profiler.info.jvmargs}"/>
+            <test name="${profile.class}"/>
+            <classpath>
+                <path path="${run.test.classpath}"/>
+            </classpath>
+            <syspropertyset>
+                <propertyref prefix="test-sys-prop."/>
+                <mapper from="test-sys-prop.*" to="*" type="glob"/>
+            </syspropertyset>
+            <formatter type="brief" usefile="false"/>
+            <formatter type="xml"/>
+        </junit>
+    </target>
+    <!--
+                end of pre NB72 profiling section
+            -->
+    <target if="netbeans.home" name="-profile-check">
+        <condition property="profiler.configured">
+            <or>
+                <contains casesensitive="true" string="${run.jvmargs.ide}" substring="-agentpath:"/>
+                <contains casesensitive="true" string="${run.jvmargs.ide}" substring="-javaagent:"/>
+            </or>
+        </condition>
+    </target>
+    <target depends="-profile-check,-profile-pre72" description="Profile a project in the IDE." if="profiler.configured" name="profile" unless="profiler.info.jvmargs.agent">
+        <startprofiler/>
+        <antcall target="run"/>
+    </target>
+    <target depends="-profile-check,-profile-single-pre72" description="Profile a selected class in the IDE." if="profiler.configured" name="profile-single" unless="profiler.info.jvmargs.agent">
+        <fail unless="run.class">Must select one file in the IDE or set run.class</fail>
+        <startprofiler/>
+        <antcall target="run-single"/>
+    </target>
+    <target depends="-profile-test-single-pre72" description="Profile a selected test in the IDE." name="profile-test-single"/>
+    <target depends="-profile-check" description="Profile a selected test in the IDE." if="profiler.configured" name="profile-test" unless="profiler.info.jvmargs">
+        <fail unless="test.includes">Must select some files in the IDE or set test.includes</fail>
+        <startprofiler/>
+        <antcall target="test-single"/>
+    </target>
+    <target depends="-profile-check" description="Profile a selected class in the IDE." if="profiler.configured" name="profile-test-with-main">
+        <fail unless="run.class">Must select one file in the IDE or set run.class</fail>
+        <startprofiler/>
+        <antcal target="run-test-with-main"/>
+    </target>
+    <target depends="-profile-check,-profile-applet-pre72" if="profiler.configured" name="profile-applet" unless="profiler.info.jvmargs.agent">
+        <fail unless="applet.url">Must select one file in the IDE or set applet.url</fail>
+        <startprofiler/>
+        <antcall target="run-applet"/>
+    </target>
+    <!--
+                ===============
+                JAVADOC SECTION
+                ===============
+            -->
+    <target depends="init" if="have.sources" name="-javadoc-build">
+        <mkdir dir="${dist.javadoc.dir}"/>
+        <condition else="" property="javadoc.endorsed.classpath.cmd.line.arg" value="-J${endorsed.classpath.cmd.line.arg}">
+            <and>
+                <isset property="endorsed.classpath.cmd.line.arg"/>
+                <not>
+                    <equals arg1="${endorsed.classpath.cmd.line.arg}" arg2=""/>
+                </not>
+            </and>
+        </condition>
+        <condition else="" property="bug5101868workaround" value="*.java">
+            <matches pattern="1\.[56](\..*)?" string="${java.version}"/>
+        </condition>
+        <javadoc additionalparam="-J-Dfile.encoding=${file.encoding} ${javadoc.additionalparam}" author="${javadoc.author}" charset="UTF-8" destdir="${dist.javadoc.dir}" docencoding="UTF-8" encoding="${javadoc.encoding.used}" failonerror="true" noindex="${javadoc.noindex}" nonavbar="${javadoc.nonavbar}" notree="${javadoc.notree}" private="${javadoc.private}" source="${javac.source}" splitindex="${javadoc.splitindex}" use="${javadoc.use}" useexternalfile="true" version="${javadoc.version}" windowtitle="${javadoc.windowtitle}">
+            <classpath>
+                <path path="${javac.classpath}"/>
+            </classpath>
+            <fileset dir="${src.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
+                <filename name="**/*.java"/>
+            </fileset>
+            <fileset dir="${build.generated.sources.dir}" erroronmissingdir="false">
+                <include name="**/*.java"/>
+                <exclude name="*.java"/>
+            </fileset>
+            <arg line="${javadoc.endorsed.classpath.cmd.line.arg}"/>
+        </javadoc>
+        <copy todir="${dist.javadoc.dir}">
+            <fileset dir="${src.dir}" excludes="${excludes}" includes="${includes}">
+                <filename name="**/doc-files/**"/>
+            </fileset>
+            <fileset dir="${build.generated.sources.dir}" erroronmissingdir="false">
+                <include name="**/doc-files/**"/>
+            </fileset>
+        </copy>
+    </target>
+    <target depends="init,-javadoc-build" if="netbeans.home" name="-javadoc-browse" unless="no.javadoc.preview">
+        <nbbrowse file="${dist.javadoc.dir}/index.html"/>
+    </target>
+    <target depends="init,-javadoc-build,-javadoc-browse" description="Build Javadoc." name="javadoc"/>
+    <!--
+                =========================
+                TEST COMPILATION SECTION
+                =========================
+            -->
+    <target depends="init,compile" if="have.tests" name="-pre-pre-compile-test">
+        <mkdir dir="${build.test.classes.dir}"/>
+    </target>
+    <target name="-pre-compile-test">
+        <!-- Empty placeholder for easier customization. -->
+        <!-- You can override this target in the ../build.xml file. -->
+    </target>
+    <target if="do.depend.true" name="-compile-test-depend">
+        <j2seproject3:depend classpath="${javac.test.classpath}" destdir="${build.test.classes.dir}" srcdir="${test.src.dir}"/>
+    </target>
+    <target depends="init,deps-jar,compile,-pre-pre-compile-test,-pre-compile-test,-compile-test-depend" if="have.tests" name="-do-compile-test">
+        <j2seproject3:javac apgeneratedsrcdir="${build.test.classes.dir}" classpath="${javac.test.classpath}" debug="true" destdir="${build.test.classes.dir}" processorpath="${javac.test.processorpath}" srcdir="${test.src.dir}"/>
+        <copy todir="${build.test.classes.dir}">
+            <fileset dir="${test.src.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
+        </copy>
+    </target>
+    <target name="-post-compile-test">
+        <!-- Empty placeholder for easier customization. -->
+        <!-- You can override this target in the ../build.xml file. -->
+    </target>
+    <target depends="init,compile,-pre-pre-compile-test,-pre-compile-test,-do-compile-test,-post-compile-test" name="compile-test"/>
+    <target name="-pre-compile-test-single">
+        <!-- Empty placeholder for easier customization. -->
+        <!-- You can override this target in the ../build.xml file. -->
+    </target>
+    <target depends="init,deps-jar,compile,-pre-pre-compile-test,-pre-compile-test-single" if="have.tests" name="-do-compile-test-single">
+        <fail unless="javac.includes">Must select some files in the IDE or set javac.includes</fail>
+        <j2seproject3:force-recompile destdir="${build.test.classes.dir}"/>
+        <j2seproject3:javac apgeneratedsrcdir="${build.test.classes.dir}" classpath="${javac.test.classpath}" debug="true" destdir="${build.test.classes.dir}" excludes="" includes="${javac.includes}" processorpath="${javac.test.processorpath}" sourcepath="${test.src.dir}" srcdir="${test.src.dir}"/>
+        <copy todir="${build.test.classes.dir}">
+            <fileset dir="${test.src.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
+        </copy>
+    </target>
+    <target name="-post-compile-test-single">
+        <!-- Empty placeholder for easier customization. -->
+        <!-- You can override this target in the ../build.xml file. -->
+    </target>
+    <target depends="init,compile,-pre-pre-compile-test,-pre-compile-test-single,-do-compile-test-single,-post-compile-test-single" name="compile-test-single"/>
+    <!--
+                =======================
+                TEST EXECUTION SECTION
+                =======================
+            -->
+    <target depends="init" if="have.tests" name="-pre-test-run">
+        <mkdir dir="${build.test.results.dir}"/>
+    </target>
+    <target depends="init,compile-test,-pre-test-run" if="have.tests" name="-do-test-run">
+        <j2seproject3:test includes="${includes}" testincludes="**/*Test.java"/>
+    </target>
+    <target depends="init,compile-test,-pre-test-run,-do-test-run" if="have.tests" name="-post-test-run">
+        <fail if="tests.failed" unless="ignore.failing.tests">Some tests failed; see details above.</fail>
+    </target>
+    <target depends="init" if="have.tests" name="test-report"/>
+    <target depends="init" if="netbeans.home+have.tests" name="-test-browse"/>
+    <target depends="init,compile-test,-pre-test-run,-do-test-run,test-report,-post-test-run,-test-browse" description="Run unit tests." name="test"/>
+    <target depends="init" if="have.tests" name="-pre-test-run-single">
+        <mkdir dir="${build.test.results.dir}"/>
+    </target>
+    <target depends="init,compile-test-single,-pre-test-run-single" if="have.tests" name="-do-test-run-single">
+        <fail unless="test.includes">Must select some files in the IDE or set test.includes</fail>
+        <j2seproject3:test excludes="" includes="${test.includes}" testincludes="${test.includes}"/>
+    </target>
+    <target depends="init,compile-test-single,-pre-test-run-single,-do-test-run-single" if="have.tests" name="-post-test-run-single">
+        <fail if="tests.failed" unless="ignore.failing.tests">Some tests failed; see details above.</fail>
+    </target>
+    <target depends="init,compile-test-single,-pre-test-run-single,-do-test-run-single,-post-test-run-single" description="Run single unit test." name="test-single"/>
+    <target depends="init,compile-test-single,-pre-test-run-single" if="have.tests" name="-do-test-run-single-method">
+        <fail unless="test.class">Must select some files in the IDE or set test.class</fail>
+        <fail unless="test.method">Must select some method in the IDE or set test.method</fail>
+        <j2seproject3:test excludes="" includes="${javac.includes}" testincludes="${test.class}" testmethods="${test.method}"/>
+    </target>
+    <target depends="init,compile-test-single,-pre-test-run-single,-do-test-run-single-method" if="have.tests" name="-post-test-run-single-method">
+        <fail if="tests.failed" unless="ignore.failing.tests">Some tests failed; see details above.</fail>
+    </target>
+    <target depends="init,compile-test-single,-pre-test-run-single,-do-test-run-single-method,-post-test-run-single-method" description="Run single unit test." name="test-single-method"/>
+    <!--
+                =======================
+                TEST DEBUGGING SECTION
+                =======================
+            -->
+    <target depends="init,compile-test-single,-pre-test-run-single" if="have.tests" name="-debug-start-debuggee-test">
+        <fail unless="test.class">Must select one file in the IDE or set test.class</fail>
+        <j2seproject3:test-debug excludes="" includes="${javac.includes}" testClass="${test.class}" testincludes="${javac.includes}"/>
+    </target>
+    <target depends="init,compile-test-single,-pre-test-run-single" if="have.tests" name="-debug-start-debuggee-test-method">
+        <fail unless="test.class">Must select one file in the IDE or set test.class</fail>
+        <fail unless="test.method">Must select some method in the IDE or set test.method</fail>
+        <j2seproject3:test-debug excludes="" includes="${javac.includes}" testClass="${test.class}" testMethod="${test.method}" testincludes="${test.class}" testmethods="${test.method}"/>
+    </target>
+    <target depends="init,compile-test" if="netbeans.home+have.tests" name="-debug-start-debugger-test">
+        <j2seproject1:nbjpdastart classpath="${debug.test.classpath}" name="${test.class}"/>
+    </target>
+    <target depends="init,compile-test-single,-debug-start-debugger-test,-debug-start-debuggee-test" name="debug-test"/>
+    <target depends="init,compile-test-single,-debug-start-debugger-test,-debug-start-debuggee-test-method" name="debug-test-method"/>
+    <target depends="init,-pre-debug-fix,compile-test-single" if="netbeans.home" name="-do-debug-fix-test">
+        <j2seproject1:nbjpdareload dir="${build.test.classes.dir}"/>
+    </target>
+    <target depends="init,-pre-debug-fix,-do-debug-fix-test" if="netbeans.home" name="debug-fix-test"/>
+    <!--
+                =========================
+                APPLET EXECUTION SECTION
+                =========================
+            -->
+    <target depends="init,compile-single" name="run-applet">
+        <fail unless="applet.url">Must select one file in the IDE or set applet.url</fail>
+        <j2seproject1:java classname="sun.applet.AppletViewer">
+            <customize>
+                <arg value="${applet.url}"/>
+            </customize>
+        </j2seproject1:java>
+    </target>
+    <!--
+                =========================
+                APPLET DEBUGGING  SECTION
+                =========================
+            -->
+    <target depends="init,compile-single" if="netbeans.home" name="-debug-start-debuggee-applet">
+        <fail unless="applet.url">Must select one file in the IDE or set applet.url</fail>
+        <j2seproject3:debug classname="sun.applet.AppletViewer">
+            <customize>
+                <arg value="${applet.url}"/>
+            </customize>
+        </j2seproject3:debug>
+    </target>
+    <target depends="init,compile-single,-debug-start-debugger,-debug-start-debuggee-applet" if="netbeans.home" name="debug-applet"/>
+    <!--
+                ===============
+                CLEANUP SECTION
+                ===============
+            -->
+    <target name="-deps-clean-init" unless="built-clean.properties">
+        <property location="${build.dir}/built-clean.properties" name="built-clean.properties"/>
+        <delete file="${built-clean.properties}" quiet="true"/>
+    </target>
+    <target if="already.built.clean.${basedir}" name="-warn-already-built-clean">
+        <echo level="warn" message="Cycle detected: pryDemo was already built"/>
+    </target>
+    <target depends="init,-deps-clean-init" name="deps-clean" unless="no.deps">
+        <mkdir dir="${build.dir}"/>
+        <touch file="${built-clean.properties}" verbose="false"/>
+        <property file="${built-clean.properties}" prefix="already.built.clean."/>
+        <antcall target="-warn-already-built-clean"/>
+        <propertyfile file="${built-clean.properties}">
+            <entry key="${basedir}" value=""/>
+        </propertyfile>
+    </target>
+    <target depends="init" name="-do-clean">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}" followsymlinks="false" includeemptydirs="true"/>
+    </target>
+    <target name="-post-clean">
+        <!-- Empty placeholder for easier customization. -->
+        <!-- You can override this target in the ../build.xml file. -->
+    </target>
+    <target depends="init,deps-clean,-do-clean,-post-clean" description="Clean build products." name="clean"/>
+    <target name="-check-call-dep">
+        <property file="${call.built.properties}" prefix="already.built."/>
+        <condition property="should.call.dep">
+            <and>
+                <not>
+                    <isset property="already.built.${call.subproject}"/>
+                </not>
+                <available file="${call.script}"/>
+            </and>
+        </condition>
+    </target>
+    <target depends="-check-call-dep" if="should.call.dep" name="-maybe-call-dep">
+        <ant antfile="${call.script}" inheritall="false" target="${call.target}">
+            <propertyset>
+                <propertyref prefix="transfer."/>
+                <mapper from="transfer.*" to="*" type="glob"/>
+            </propertyset>
+        </ant>
+    </target>
+</project>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             Q Äy™Td‰=2Ùñ—ëVùïäßôw››Ûå®ğw;="Fu	sV¥Ø«P«Ú“+İïµ“¾$_wˆˆ:§s<”×·w eÉ \vŞXÊŸÁáwüãqğ†¬¹ÙŒ¹<JdıÙñ"›d™)Ùô¼LŒS¼b·àªÖ$Åä9Â´§O«úJi‘ÿ«‹Ók˜İâaißrÉÙ{ouÎJ©Ó×R­kaĞñØV~A»Rİ›ækBŸHëféM¢LQŸ9OŒ£‡5Oíz¥Nw
+üs¾ï–×¨Ö¡ñåÁî]S\ÇÔúÇ½ówš×9÷ó}Ç5¡0ßÛ¿j;‰¿<å¿8+ıSß0í¡¬à+Ğ×EHO¿€ƒ^k‹‡1({v¼S«›Ó8vğP
+.¡âA{ø"!ÃõADõ%¤xM:ØM’ê¾´ŒsÙ¾b0¡Føš£l´ğŠú
+7ÇtÃá#ĞŸv)Q‘d®;¤£z‚cŒ¦¼© ¥Ã]{VfûJ]5æ)xÖÁ\“e"oÛÈFP˜›=‰¼Ò;¶wGç8Ú±š¾|³Pà$zMßÈT†D[›wUñ†T8xû''loˆ§BV|óŞÉ0‘ï2ÃĞRüîÌùÎStw$ü±WzwŒ{ò¬"+®ßfİtÎØ¹ïmmÕB¤6â3ì…}j¿LšxŠûÃ _zn¡»©muÍgµØµÚ5Û5ÛÑ¥{—/x×„vA¿+Y¦ı- ºÜı¢ş¿šoào–ÿ®¤÷ÏùF>#şÉ·ó?÷´Ÿ-øôÆ¡´±ró¯ñ~Š³ğ‡üùMk`|Ö¶Q¼Ü@úG}Ô¦mîZê`}±“×Ïß¸ü2§\ÛášİO±ñ¶ùP<’óÒåôcx¦ªìmµ‚áH·¥Ü“kfœ(=Œx>{]”äl‚Oıï·¨rÙ¤×H¯”l‡x¦nùL÷2¢‹ÂñÔ×%~å8êD7·6İQNÌ÷¢k²nù5ıù»S¼ñ¹ö¯[¾è×çtæò‰ÌSŞ¨Ü½i¹M2o„®BF /ÓSÔ ?eO4©û­}2Cš£b+ùÁ`n™Hªxª?ûPùÊc8ë÷mn•ãi‘ì—btô‘_P5°ÿ@´iYÖĞÕ=óSåB;W£øGõíOò«Oß-_	<4¢¿Í:İİğW•Fbİ!°Øb;"M,E^eLE³–6:ìM¼Ñ)6Rxm—š7$ÂzÌP–J„¨"E÷e;Ó‹—å3,¦3Óyºl™…¤Ğ¦üß/;.^e@D"|ñ0T×¦1ˆ# Ñ? !…ÃDWÆä­:€((ö4Œ–È³ÇJ|Q¸ 2±¹ŠÒ/ÇB|“ŒW¢Å+Ÿª'æÏRyai†È"ü^!¾N’i©1e²+7"t°>ùjÀdpìÄ_:¡Zªä5|ğSÆà[8JÅUºm](š² ÉÁ·}Â5–½F§‘˜(qôCÇ%5ìÕ×s¢óåÇ*À4@‡]Åu©÷ó‡¦RoÈÉä‚Š+S0wÒ#¾œ¾4v#inRìu¸t)äQ¡Tı3€#;Y³dLÏ.€ETß¦˜aìšDô4é+4q¥.›<]\ı!@ÕÜª"9¥8Ÿ2ã7IUAe
+‘ë.U.»‰UJ+°;,4ÍQÉ–YêE~,¶CMeíéhË•¤;‹İ!F<°õ£Xô[\|ÉË;I«X)ÌÌ[	uÊb×3:#Qaø†˜¬5’cw†´ÈùÉªÍPcÏôcP© 4Ë¡UÒñ_3¥ùx8dû+yü|‰ËuÔc¡°Ïy—–4,Geé¡F­]LšÉÇ^MŞÈO‘(»@T[5MÀ½[øs&/Ê«ól„r‘Ê\Rëw€ºvgMÕÒ<ÌMš•#Àg”#ê­7ñÂ…ÃG•+IÙŞ±uK‹NÂ6€¬sSÙmì.¤êkÅPú.LœY¸Éª#,­®e¨‡}2YFRux0v˜÷ÒÇ/% °H-¨Çp«(eëÏY‹6k…İLÎÕo ØÓ‹®Æ_âĞÏ˜ÿ^Ï"ÑdçŒi{dàÑ
+›·B¬UæÓÓ)ºPÔ)H”…5ú¤lá§]Ö+–Sz¨æ©Tlùôõ!Ó‘E ‹8ì‡½â}5RÆ4©bL¸›”Ío†•êù(°”õ”¬•0¼ó¤æ†iÃ"%h¦j‰µÄcØU©"J¶ÂşÎ0ö+É0ŠË¼öpçÔ„8¥\7(ZBáŸ©“K‹ŒŒ2ª5•èîG¶aYEx†ÊqçPğÓÜ'¢ã%5Ç_¿ÜØÜg¾gkÄæ}~“¼ØÃÀ÷İ_]}çv¡‚˜0ÕS_ifïm[è6šçğÔQR©î©õBïn_n¦pTEÔ¥B·`xãpKmO,	êÊmœtV°(tZ2ªÙYBtuãùô 6–åV­‡w½ãö®Çu ‰Ë¨ëà¢ÅµöÈ±i¡Ù»Û´B=F¡Öçjæ|—8vğ&¿O(p$Ï¢'%½ÑsÆ\x±m°¼ìÉ™å¦‰TÖbQ—0x	Ş~ÅËĞ£]àï|(HGxO­-ÇÅ_‹©ipé/ñX(ï/¾ pzàË’ ¦]x÷FTµâ'Sò;¨ğ™l¼ÁàµDJ‰‹‹]ğ°5Ø^^S%¢j’÷Æ/ìçâp±£Sÿl÷áj?ádk+ZŠ‹w©‘óËskD:C¨¦1µ^Ú¿ÙTĞî­ÚS›<?¹‡qwx?+®†‘´¾¿Ün½Ë¿º»ZVÕö›¨ë]Êº¿Ü…2¯/ğ#à]ßÃ:!T¸¡$\ª'öƒ°l#JºÎœäñ±î6t•‘è{4¼¼{Ş-ïŞ	cy$ÛteöØç.,_îjşÏOBßâÿ…ğm5=÷t‡E·]_'‡‡³#&û«¯»z;kÈäuhÛD¦$ùRíS©øëãàhÿw.wCºÙŒ$úÆ6rÈ÷G µ–‰*dÄ«õn >¿ôt©µNt-à§òÙsiüÊ2¿êŸ4ş¯™ë~Ü³½Á]Ï9SëC|sĞªä,ßâåøåN1¸eW oËÂ+yœr®¼7ş9ÑzoN÷Ş¹ÇõÕuŠ”|ToÄËûD‰rÌ»¼£Pë¡¾:$
+Îxvÿ	‡ÄTHô¤Ã3I×¥’î§ÁtH*Küºj‰=6ÔÊJAçÖÁınT® ƒ{â¢UlÕ¾Ş	Z]Ôúˆ½©Ôh%Œâ"¦i[õèlBdÎK8´;À¤æ$ù#ìàf“i´”pÍÜ—ÑópD ±€& šôî%·Êw6w³ÊøHÅtÎÌ¡:Y-µWo×ñ6øö¹ö¿kñS.˜dÁ—A¢úÃõ÷GïşŞ÷:lÈ|—d™²Şl¡­:Jò„§®$l{¬€¹G¥G˜9¥Yë3²Şôš›Üw}f¡rs!E'n™“š8ÁfêkÓ]t7AØœ›ÀÎ—–9»ñk!d@¬‰CÜ°px­(GÀ÷8K‘ÁÏªöö‰WÙmİAŠ `¹¾û›¸v0O’CŠ=l°8‡Î´¬ Ÿ’'C0Xö(­éû\œPDp2ÄR ‡ ÛÉáQv¨ËÃ’=,9—`/»äu»Ûé$ºg½iÈµOÅ•Í»Ø¾+ÿôêí?ãß¸ÑJ]ÏÒ mÁËeœ´ >\C € IArrastrarSoltar/ArrastrarSoltar/obj/Debug/ArrastrarSoltar.Form1.resources
+ =ànÓÁ™6FD2öP3à¤„‰DÓØÇ€AC?w#¼îíÑ….LP*Q4pJo§ëş¯ÌÅ}å5ëÏ¿cvık²ØD'ƒ…é,ÿä¶~€ı™¹ëR.s/ §6©¤–ù$7
+âD4/:îV(!O ·“º( ó¦}ziÕ0K²œø‹b¦ŞÀS`Šöï¾»ü€Fö¨[‚– €œ ?¿˜€ =ArrastrarSoltar/ArrastrarSoltar/obj/Debug/ArrastrarSoltar.pdb
+ HnánÓÊdş
+0wTT23òPwÎëÖŞ¶?86`Æ³^¿°~x9?)G"*­š½Öné[•Z®–¹´¨B°ŠÈ‘´’
+ ¢°‚€“Š€•¡eŠËb–ÑZ(©h”Ê¬•I³™İÌîfw{­ìcñ¾R[?ÆaÏs™œÎg3™ÌÍşg3~ç{÷;ß™½ùÏœî}æ}ç{›ÔõïçÖÖçğ6®=~öæõuuõ…®º{RÕ³i9¶ö¢4ü.ôÑö„®(#7åIP$0ßËH H¥•J“"ÃÃfiaD`•ÛÑ\öh7O­"·¿Aâ(©ĞüS>Îƒ[ä|jf$ı>BöŠ&*Û©gMŠ¢'Üâº÷9->-*»ç÷=ø6özÎŒ±/¿µœËğsõ¾™ü¿è…ÀÆcÍñüI{’×ó´Æ°Ò¿¶á¼«üû±±åö«Nñ÷Ì–„™ûœjî±çAıÙÎÇ>û•ê7o#•ékz÷uı./ö’}ğÔÖ‡üßô¹ï·qØïtÿÃM+ÄéıŒ	íô:²‡©åyXÿ›øyŞGÂİÑüß¿¾ãÚ}¹¹¯§Me¹ëT‹ÿÛ«,D¤ÜİÎÏs²¡J²çU´ØÖVØÚV[5ö4ûJÇÏœ?€7Ö¯]À/ÿ‹Ÿdùíë—Ğ9´µs ²¼º~Õ¹f:ºxZV·Î<;q·zPÌÅÓÕaÀSğÆ*}éøVà(ŞÅ¤({»}pç{*ü/¡e_–è³o2mÁˆ{ËÖ¸¤Íå&J,¹bÉ%ÎQ?êëÄ¼Q1³L¼ =äı·*v>¹£ïtLó@B3ùq	Ïm²…şV)¸ÛŞª=…2+İÔh(|.¬ÊHƒ³H‘œ>‡/n#Ÿ–i«r«›*/cgËı[ 3*ÕjÚĞïjè¸a*$’ÆÎI[ß#¦d
+I…17"¯ıøm·a8 •’ZfQi–Ò{ 7Æ×HÑ%¶îª	ùC¦“Yüú>—‡ì×ótr½OG•¶…6n*U‡ tÍ	¹+,ú’GÊc‹]aD}T#ãV CttæÕ+²ÁÃÇøıU#%ïÀØ(€³:)éu¥4éuñfºÖ~’}± šöA¢œ&‘#¼Ä!7„S`.¬@syzŠ8ãÅ¯u3T$Ì³’AÚ°J„³èÑŒUŠ§-]»wvùÊøØ&¨í(€œu\G?I¯ ^¸H5oÁ4ÌÌ
+~±á‚KD 'Gª.™lŸ¹àäx–ÊV¸h,€³ÅC$O…0Aª.ŠÈ~ª¢0E¯Í:¤˜ıŞÏr±8,õ±rŒÒĞ ²	JEE¯ÃF©R˜áe
+{t+èDÁ{Ìåš:Cı’'Äµzø8,ÀiïÓpÖ$UÃ¤‰æhkAW c#rgJTeŞ3ñ§b3&sÈ!ç›ËÉ<×Ëè1_­¸&ÁãÀ°
+°péââÁyé°½|ˆ§åü+_ùV4S¬>Ú×=víÍÄO^?k¯rVo®¡şÂ¿béæé¬(í·/œ¸Ü€`¿.İ¿‰«Ù–›pöø¢ÒÇèVÌƒ´ÆHbé:M-¡àT\ÅZÆÂ–¸æ ”Tï.py•µl‰tËSF´ze•
+tãuƒ‰ûí!^ÿ²ç¶À³`æ2&U÷ögTa`ôÜM}åéjËQÁîáË±D Ü@pFùÅñP|‹"EmlæşUE´¸çkHò	ªAØ$nM@; 3d«m½‹çWEÇÍ¨÷oÜ·)W‹mÍYÓQW°ôR(Å„÷8—ÌSê÷‹ĞLYö0‘¼sç==Ú—#õÕÓrû‘‰ÓRWV(df¹=‹ÛÒ~ºP\5¢#Æ¾
+néıë×ë²¯\×[(ÄYßd‰‘UÛöˆ54fòX(¬qïÊ÷ :pí×Ôr¾“¼€ËÓ–F‘öÇ&N¯XëEşÚ,­[­)ğMYö()T,)–,¨)¡–Îie„“‰vd¶]6’*;¶³ ¦€›Ug€ÍP€Z5­ñˆøÆ-vlˆ¤FÅ’³€³¨eŒô1x›­¸vÏĞ›CQt£$Ï†háÎ“7ë¢$„¤vª•	ÆLâÍ
+6y¢
+ÄSTìù@Õ\®ĞÃæ	QlàIûUgÀ’N#49Ğ4i#@Zß€H6gç$’1`™f— ÿAŞ¡´|±òGêÙX	Ú†xk˜/Bj”ÒÕz¡ëÇßÃ?°nÈ}ßÍ¤û$	;ÒŸºBµs6¬Ñ¬…7^¶|V+€3m]¦}xcn36eÜ%à±5æß¦U@qÔïÄ²|$à ílÎ6Pü®»4pÅúãø‡™d€,¿È?€ÚÈ:sLyD’,İÍË‚ñß„Á °
+6aÛ’Ü$‰YD±w:
+dP“ ÊÌ^ñÚÆPKÉ'cÊ,c™ÀScœ*ÏH‰{Õ‘ÔU^¬™”k‚G’µí>ƒäÁ¬G‚>VX ¥òá7!GÛõÒ2ñDıi-õS?Œ™|d•ê®ÚmsÃĞRĞšBºL¿kãH¿€æH½2+ƒã*¼ÑêOº"Ó‘}¡ó†£<cÉ^~BÖ{Uñ¡¢ˆõf|Ìâ!İ[ÿ»½{¬ñÕœn\uFı–*¯ÕaÛ=–dÉØë›F™llØ#~®Ñ¼Ì 7ä8#â”<"49®7>$s#2hÏ‹ş_ÚNŠR]<ú’+¬l(vº×x»['®ŒÒy0-W€£È14-+6Õ^öØ»×4)±~EŞŞ×ü,]ûdPT
+†ñ4¸DU‘8Ò2	~É‚-¾#É7³ ­N"Â‘\bT€Öë*¬SéWE¡+ ²b¸¶ˆğ°EL 4­ÄğGWEeµ4EşªûèO!–¤Ô–32‹~ °¼ëAğzëfÜ¢zámD51åÆÅÜ>ÉH´"¨†º1<lV±˜UÄ5KÍ=:Í1²®–¿¿›]/¤)ïû0¾ï(ÌÜ"ùæ ½4h‘»Õá4~÷p˜
+0>%…$…66Ñ‡hŸk=ÔÄøŠµ®®­ÖÕTTÕc¡²¡	º»B¥¿Î«Ø"¦¥nÛRÛ[O0IApÔw¹G¶ó¸Ù!ü…¦¶B­©§ÔSÕUTc²2ë4´“÷†{“„ühòÇb§Ôêiªªk+U>^ÚÂ˜—úïZ‘«Ùbß¾Ä=`D|CÍ‚&oévn÷êŞé“¾¢j÷@jÃÓÇ‡ãêNœÆP×Û'L&!c™¹ã2®–Fş“Qé9©ŸpÑ#ãÊ•šÏ¦F™¿õülùëCòaaà<ßæOóVò·—Ì›æ§.½”z=FWÌ!†“cö"xìcõûÉ5%z×wuï.^—åã‹Â«-÷×{’õ¤rûnííÅÚ(.];-]^z{ì´±oMo*NƒÜ¢.–ôc–B‘{h¶Õüéõ©Gpº5¸‘?REôJĞ[gèı8gÏäYõ‘ÙÎGíç	•´?C5$(ãQ)%¤aú(·R:E‚³?E¿~<{Y«0¯M‘÷D‡lÇ$“@„‰„©*‡Û!È£¡)’‰4$3êê,ÊoGì³çâvqgYVëÊ,éú®üÓÃF ß€%²/tœ´ >\C € XArrastrarSoltar/ArrastrarSoltar/obj/Debug/ArrastrarSoltar.Properties.Resources.resources
+ =ànÓÁ™6FD2öP3à¤„‰DÓØÇ€AC?w#¼îíÑ….LP*Q4pJo§ëş¯ÌÅ}å5ëÏ¿cvık²ØD'ƒ…é,ÿä¶~€ı™¹ëR.s/ §6©¤–ù$7
+âD4/:îV(!O ·“º( ó¦}ziÕ0K²œø‹b¦ŞÀS`Šöï¾»ü€GÕoo¿­ ô@À€ SArrastrarSoltar/ArrastrarSoltar/obj/Debug/DesignTimeResolveAssemblyReferences.cache
+ ³‰ouÓÈ«;0dD3Bô`TsğæÈã›³O×‰á Z&¤!A-BÒZ İP$Zx±jrf8b7©ãráÇ8±æp£ƒ‰äŠ³'á4İòœ-Å1»üUÕV']Õşrÿ9wõ]ù]W­pµ¥,²ß´ô®ù“2óÜf¿ØšôÆgˆÕ×„íc­âj¯†§)a9 P«ğ“f7¢ğ>Xâ…Ç„‹qŞx`{K–ìJ.oU®í‡|®Ö¬K\®âê-îÿÂ[™Oq\‰Áª­¨:)D3;™¹«0<%_‰(÷ˆùŠ€°ª[Ğ˜&¡t÷[H÷@á-8)AÖ¦tñy‹ÀÆ†š®D-°Ÿã0íõH¸o©f¥¦yÜ¡ÇN0“JëÑŸÑû5âûİO÷=ú÷ïú'©,Æê˜óU¢è)«Ær¿çD³çm `…ÌU-–=NÿÓÉàoàWF¯ß-Nœù›×»ÚMñrFÚäõİş!ÇãjÃz“ÿPl´@¥œ.É)rü
+§ìV¯ğ5ãI\ûAÉA„È£ˆ÷Ç˜{A-vC#âgÉCµhPê2¦¾Ÿ`¨2­)I·&ä”äO¶kª®÷UÌíëZ¹–¬†^âã€†t+ÄeÍ+L¼‰L2Bó†x‰e¥ş €8t:¶áøŒ,ôòÅ'u±Ôic©Ré'àJßo½¿É¿LfÉİdÄÂ\ÕZ¯V½o3”Ægûµë¡³¬ÍØ“qì¡©¢=¤6ê#ÛGè€‡³zt	¿6 âÜ®Û€ XArrastrarSoltar/ArrastrarSoltar/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+‡¯ZşQÔÈ‹GT3#?7VÁš!le’’¹l¶Ë+ª·À&ağ ¦Y&3	sR&–´*/æ¤˜ÇL-|
+åôK† çu1²rYr¿…ËndŸvcÕ«¿Ç9ŞîêO»§÷¼İïÿÏÜIbÄ—É|9ár$È‘#ø/‰ëé_D_ÈÊÏ»µ¡Se˜+ªÕ8k®ËªhºÛn¹«¥§:nÉß€!s>‡}IéşŠh×h2>|÷^Ã€ƒZ½V€7Ş{;ï4UŸ•ZlÊÔ(/Fz¹Jà$ÆmÔ£Å]–—Iv«Å{ÌŞ{’)®«áÀŠ±=ökNØ:ú@vÁU> ÔâaH1I°=¹Y–) cã¬«€~º¡m¶„¥ƒ&°ŒÚ¤Û=‡_Ş¶«aZ¤¯¨4YMİ¤¤ß`ğÜULMğí”»`îÇé²£DK%s!ËBıï`ß´i§¬ÍĞeŸ\é5¢™ ‡Ÿé2ËB.3Ç:o/Ç¦qõmİ`Õº0x>ía„i•1ƒ³€×ìóË#À@±D7rL~z¯#®3¼wûwDÁŞ„me&\-iŸ&.u„0°€'Ğ(-˜H°iÇ+ƒ¯¯]ÈY±uêG„ø×æ4‰åmô‘ğÒQMúàS²%s¶4ÿ²‹HªjÎHÊÊxÆ óĞÚÚõ¬¹¶Uj¹õ•eÿ?~ãM8BÇ5¸™«sÃŒ¿çxo™˜­¨ø(gee~nvÜí¯òMâÛÿV&Oüş¨şj‡¼ö¨Š­¹wåf¹I½7
+Ó
++/‹‹-&é%Q±PñpëÚ¤7ÃLU~°«ç©n¬:Šytö-ĞÙ;|DÔgrÓGj¤=>A¾üu<58ªî]MÃ‚Á†ğ¢ÏÕïv¯åSHõk°V‰ù‡6bMoÛ«4wVbrŒ(²«n_Â˜Ë¦†G:qõ˜hÓ	~2,ÛŒSRŸ	Q±üIºØshİH˜dz™Sò¨gKê—|ÂÄtı6:lRÃ.6¹Š¹yJ.Ğuãº~Ì,j,=7`¬Ôö™èSÚ+ô„TR™á\`LprÜ6AÑGçAç”Y;æÉ'–4Qy‚¦§`tŞïoƒê©oæÚÅÔ\Îÿ'~vÔEæ2©£Oty8ñ¡¹ı2¿`WËàÄeşÊQ†ß°2nÒ£F’°«ƒ;nmÍŒãä½“\Ef¡º'y§l…Cgm´hI•Ş™H%|1OÌ†ò4y2îØJACqèÜAThüj2_
+ÈÙã×æ’©Eù>÷¥?¾»ƒ†
+`n ¿Ğø[›ñrJy]w{Šjgko
+_Ñ#™òaW&\Ã†úJÊwƒÛ´Ìd}Ô%RºÒJ¿’öõéÁ2eôIfaÛ¸[“½Æëğèô\Ìşƒ}d·‡îeÈK•
+ˆ7ª3¬'œ†GÓ–ªÈ_öi±ü¢ [­rê„_o¶VyTGv¶BÌ-‹…µ Óï&Nš‚W„^’«*¹6ÌêÚÌ,æ¯/øû¿ı½Êı\b stQ-‚       €  hArrastrarSoltar/ArrastrarSoltar/obj/Debug/TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs
+ zeõ nÓkÕz‚       €  hArrastrarSoltar/ArrastrarSoltar/obj/Debug/TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs
+ zeõ nÓ1¤•‚       €  hArrastrarSoltar/ArrastrarSoltar/obj/Debug/TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs
+ zeõ nÓåuoF»  bÎ‘™€ *ArrastrarSoltar/ArrastrarSoltar/Program.cs
+ zeõ nÓÊ¦7634/VMâG›0Óq°BUaøÒ	bËPh¢²‘ñIø0¨G*6 88%éK‰\Ê,âMK+ıûŞ·‘¹æıÆßßqÿ¿˜½,¬ÔZøóoïlE6v©Dˆ%¬|ÜäÂrQŠÇBYåŠ]>#Õ)Ó¿Åø«u‡ên¡¾s5Ëº§é‡Y>Ã ;œ0@xê Ìb—¨á¤ÂYÁ:ƒ!B«Í¡Í¬X]ôuÚ\Ùâ|V±‘oÔídj€ A–î£šÀŠbTb!·1ìP*~½Ù6Ş×/ù¶ì¢™ïSöà™¬ÇÍ©¨İ' ™80SÂg¹§³ø2_Z›”/{”]I A2ˆZxÈÍ¸¼ ¡«²PK%é!,é#kä.óÅPÈ;SËu¡¦ ´ÂÔi~ì\û^ô½K€]Ò[˜VÚ° àìõ€ :ArrastrarSoltar/ArrastrarSoltar/Properties/AssemblyInfo.cs
+ M4ô nÓÊDÖ7uC33ô`Dß@¼Ó%‚5u°åwT[ü Y¦‹ ´‹tÚ’(“^76]×]º(òÁ­û
+M4ÜnKÄm2pû=Ã˜O Ì9ğ9ñögïüoùùıLÕGŒ°NÙSİ)Å
+_•KÏãñkhÍª‰/_\R(f÷"ŸKvÃüãø\•Ã8xKÔ‚1-‘!õeûÆXÓb!&¯Aì†v¢,0¢†aƒá(&HÀ¤øk˜µc™IvLüÂ|*Aı@XfÚñ_2ugÍ<µ›”ˆa_ùˆ%Æ"‡YA’0d$8çY>xkûÆ¨OÏ,÷‹“F¥K
+w·9D0~f ²”{Üò|6`r„›á!ï tÛ¾51Ì< ñ	:9ûÀ]LÏËÿéÀe$ı¬sÓˆ¿b+Vx®íz¼ 5ù÷ª‰„XHšvó`QÑ´D¾’9#­MQäëË!¦RªC÷ªJkØìk ‰™{#,”¾6‹udsÙ•‡ÈÎÊ†;şß[Äè°Î.9Aà—†S·‡Í€,í
+Öè”2è)¶ã(à©uõ}rz-w»'ÃyœOIkõm°İê':¶sÑ^ù¹½Üü§™™3J‘ÆC»à˜—–yJa1sc;ˆiúÁœ¸k}Xß01öå»–­'ËŠå‹)ƒÅ»¼oØBlÁbç˜hÁÅrê.Ù·¦škòÁÆÂU«§
+Ï†Ò¹»¨TÙ°iLáôPe¼ãšQó®¢á"ˆPƒHltÄˆc 
+¶¯³/â!ÓùÑ#¯õC[›ê>t¤ìŸC*tL—V¹u=J°¹m*•+Ótì£‚dİ‡Z"
+$TtÇÜˆ)ÜÅ•FiV×ë0â¹{2»¿»Àç·Sx‚dùZNêQš’ÛÔ?l8Äíš>Š¸²öû©Ÿ„üÛúG|{1`Äg¥\¸ fğD€ @ArrastrarSoltar/ArrastrarSoltar/Properties/Resources.Designer.cs
+ M4ô nÓÎ‰6eD33O5]øx=…© #)¼“Fc (Ü01àb(ØÀ0f‚‰);ÀQ³’ Yñ‰²nšäÑ4/ Õ”‘H¢˜lI¦x9Mµ}\ç+¢ì¿ªºìå]Wßÿãß_ŸÒíİïÅùúş—n«Èı³{RE3óÅšN¿ĞÓ2 Íñ…x˜¬4ô2Bd•“*‰WW`Ïf´ï½S¿I¨ÕÒ*Îašuã‹…^'·Şğïøx?‡¼_¶ùã›*rşXĞœÀ´ûGHœnüĞu/"u .Y˜dl5³O àcX”lºùTÑé1Ã›Ş4ˆj‹ÑGTì€¬y“L%6…%Û	½ø¿3ä‚åOÀ^%áÏ_ds¢œ‰Qy9´fö¹¬øå‹®Hmñì¾mm#Î(ÇØ9¢‚‰šêI;!0€y]J‡R'ÁCRX?I–?¢VQá1xğ=®Owh¡WÆû$Å_VQ"H›`T.üô.2rÓ/³|T’ço`¨ôŸÊˆÀäõA/¸ã&oƒ«%k<J¨( ÿ¬+ïÆ‡tB¶TW; â"ş$ƒ:Ş±=6&€¸ğ
+tƒãs#Õg¯ §ö¬¦Ë‹ÅÅÈ@—#ÁM‚?ö¢ÿ‰pNƒÚ‹èÜ¢
+%¥ÈÑ)R“¬·Ò?„Â¼—-”Î\"B}7ôªÌQ³ ¿ğğßÊ^N7¸˜nñ±ßt¼L÷&›bvÍéÁuà¢·kKv™È×½Ldg÷µ Vˆ"Òqi>Z¹şî¸Öş)b\ 8‚¼X‡èèiõYºôÓÌJ +çæE¹=«B¨JÀËšB K ÕUÑ»íÓ}çy(÷‘TYÒ(+i©ê¬<Ïƒ	”N¬ş>ğÉNeÿé¶É*ˆç"å“*Ó§²)ÚÍ™‰›+)­Ê-æOÔSkVna„Ã›0Î÷8¼fÆ-ÂŠ‘Å{ƒ÷ààá½‘‹‡¢H ˜â‡ŸDá½U{bkê’öîknçµb÷l/ö$ÕÒgZ;/Ğ%¨â«ÎÀü>Lpœ8;ŠÎêÍğQ-&Ri§¡Š¹öõs»¶6øXw¢C¡÷2GèŞôÎŞy™ìkø#Ö˜ıíŞù`b2ô9uÃe2;íº×Ïe<uæÜõ´+ï»ÅáU»z×Œ¯/•RQw.X0±}ìûºá7eRÅìîî–ínıTk;‡9Õ0Û«Jã×šÓ¹˜òÜñîû1­)->ë!àäÔ•¹õ¹tîüå“!Ğ™xÙã½©HxÇ
+¸‚0¢Iú9ttwÀ²Ú0#DŒSğ¥¡;ÛDì=ª#ëv†ğfù7Ö™O·[İi†‹¨Y­Ã=İ¿yöş}Å=ßnúqı×«XÅ]áö–œŞæ1²$]Ê¨‹¶·]?Iø¨‹UÍì+ ”Ztv€ 9ArrastrarSoltar/ArrastrarSoltar/Properties/Resources.resx
+ M4ô nÓÍ[É63C4?5^úğus¢Ş˜ñÎáa¹ I» h¶M¢F.À(½ñäo.æbz–dmß5½É/ƒÆçä¤±¼Öö=ßÍ›˜’$şxE&¼pşxQã_ ë IÂÿßïü·ëÉ,ˆí‰K3\{ı÷‘Ğ¦üs`¸õöXô½ëäûşëjJg/¨E¿ÂÅ„ç<pŒe§²ttÄ¾´uC†)`q6ûıš0>©t#£ŠÊŒ	‚E ¢|1½‰PÅò³:PHœcÚ ¸¤:ùÿJK´9§R†y N ªTP_‚ğ>}ŠlÌ66¾¡adìµ]ûF /FpGœ*çËˆ9`ìÁ"6
+0aaíÒ%Ì1,œ" ZÈé …m0Æ ¢
+LqÎÓş}úç·$çZ©†øğ…“áb{&ó„ÑtC¤~!ûdU#.ÿÛÊÚU ôW+òÆ,¼÷ _ò )]’öKvt äÖ·?‚pÊ}„ùL¸z²¬+ò¾3í4*yŠÏ]7zXk¼èøÇ0w±ƒ?pËú÷ÎØUÕıÕüXkšáäËTï€(íöÁ%rÂô¹Q"D—€˜ •·
+e³O Ü»¤²c•ªd
+
+“‘!uÍo±Pc%ì)¡Äv(e¹Im¯åúX1‡gğÂ±I'=ÖrX¦CÅ*ï¦÷ó#åà04íâóñ¼ásñ°îÒ,eDéŒF
+Çı§ú=·Qîv0Øù!¢ßÃ¡‡kÛ?~dÚØdõ µÛÊÃ¸¶÷xó˜Pç’‘˜§p6f†CM†”ÉeŞé™b¶Tòš–*#¤ˆ&Ê‰¨–ğÑ1S:ïèO›*"0ªhĞ2­h…@F¯#ğC…”« jSæ×6ñÔİ‰Lª‘š
+Ù&¡ÃCÅ”áŸ*œ³|êdGåQˆßeu§­l.Œ@ª©®¡SZ¨N­eIŸ°ğ(7¢€PÏ@S>àNfÖiƒÂ¸ÿ–’”õrQ/JtÍà°Í+N·m¥Ê#ÙêCB:
+ŠI‚Iª²FVÈ€4$‘zc:µ*FD"±ê&¶vPéE„!½1mÛ2]Ä00‚ÛĞSÜF<öŒ&ˆÂå@F¼Ç>á4[÷€eM¢ú À2°¶‰fÎš£Wz‹«[5É#·Ÿ‰oıÍF©@^Ìàñàÿ7P­R…h
+_'@àQS(©~ímîy©öBáæuÚrJÓœ§&UusiÔÅêq»g´²OÂßåj¾ßš1õMÂòjiNÅ[ZZxÒyÔ_»½óé¢iÉ…ñ®£[¯.ûıNwaş‡ûcşiÓWa}Fê…³c–ÀÎdÊ)î5[ÎNzGêRıäs²Å†sˆÈ»ö›Èz;÷.t@ç2ÅÇX´F™ØgŸ«6qÇÄúU‚Ïşÿrhg;:O%îÇ?uLá…è‰Ö¶ˆıa¦ÎİmŒ0wAÙ=ãØÅ,CMí{×ì/QN1çURä‚Sd(5 …$°¤.…,A“á§±:”My#ş ãÚguìğYÔiGŸMi¦d¸¾a¨šÂµê³“çpÔ2Ìàš\.¦¥¹•[5Š»>:±Š¡¢ 2õ\5X~ë•vvDãHÍ¥ÚlØ€Úîëc[J¶$}Í-ó%½&\Ù5Q¬Ğ%±8<¦Aîˆÿ2r›­Ÿp<A­l;¯Q7—ûê|?mÒÆêmZTÔÅ¸´Ï¨-Çö©xÑøaÿ²_wLP³?:#ï_Ü±¹¸ìÛ“F6¸*°¸,Ş‘¸7P»Î0¯ê$Ñú½ğô—kú‹j‹QÖÒÎ¤_/êPŞÆ›Ş?ğÀæ¢Bı
+\š*'PÎıh¼9~qeºŸ”@â÷£Ñš7ŸƒÕÅÇÿ§Õµ·®ê™ÍcÇê§ÍÒWK¶è6”¸Õ[ùÎ uÔq¤€ ?ArrastrarSoltar/ArrastrarSoltar/Properties/Settings.Designer.cs
+ zeõ nÓÏaõ0eCCBô`DŞ$pv¦«‰ÉÍ$Ì¡hšDhrã—WµmŞE„G24àøbùŞIwd¤YÃqÇu^¯{Ôîù¯ßª©ù¿—Ëä¾ã?¯Çç7/“tª¨;ËjéT§Õáöüõ±è•ÚVª8Z8¨R
+WN›F|ªl°¬
+ö9¹9Ó‰<Ø¹±úÏçÄb±VêÖ¦…×ÄÕhš™?q±A¼£Î,h«M+–RÁ}D-ö‚'ŒNç’YªÒ!*÷¹¢VTZçŞÜéÃımÜ7€ĞËT_¡RŒ|£íC~~§;§º~4ºr'7V0Ío¤Å“¡SäÉŸ´{¿¯ÉêvÊ‚Q4^óíî²ÄË Ë4ºä¿õÿ¥.•æ*{ôÛ[\›•ûßi{µA=l}A&xU¥O°Ú¤\ÀÆ6gæ,š$–ÀÏƒ¯lOx€Şó"ö<g½£›Ö4DŠZ!ë6>9¡G@”³©ïE„Q‘¶qº…J¢`ù-9h¢qÃÃ”¾²¾½è»¸vò¼PZ;#t‰èDn'ßRªöÆCOSzQ$–L¿'ı/R„5ÒDgØ¶¤jöÚ’üqÑü¶*Ñ^V¾nêà­×9W‰—(sûÚ@Ãƒy-ÿG{\9Gú:¾[iX·ù `—Ø€ <ArrastrarSoltar/ArrastrarSoltar/Properties/Settings.settings
+ M4ô nÓÇ)´ eC2ö`DŞƒÁátÕĞÙt"Zİ
+;
+øVFÀŸ„™"<İĞòG…ä+E¼{ßÎM0ÀÃØ}ä?={¦¿,Y<!à§6©ôĞiÈ†Úîªoj§Œ£dõîË’›H°â¥ ’–Ğªk„®ûJP¶ä0áCkÜL(^ŠvB#MÅÔck)´‹xVLMñ{Ç6Æ$ÊĞ×fà„+†y¥	Náş9˜ØBıp¸å~÷Ş°©‹äˆMi0~?–ö Œ A€ #ArrastrarSoltar/ArrastrarSoltar.sln
+ zeõ nÓÊ’6dD3/UMĞHàí3L¦ãrDô€CA¨Ó$xâÁ8ò'à$(ÈĞrCƒ
+±‘É¤áíæ]Ó«º¬¼|Šï/Â®ï*óÿëû‹ûúûqñu$§˜ñN—q¦£iA=˜é@xèœo"D4e¸5<¹± ±eš‘ºªË
+<–iî¬» ]!éU'7åq[«Š›Ê¯JÌ†ÍFoÔâß3+Zúğ†ÿÀ¹'¶‚6úÌ¾êÊ0E×y…#.(.À6I§Èã¾‰ò¢Ê›rËŠiÇ²£€œjÍ°»ìÎ®I³¡.“zmÆ.£÷Ú¼£-/ğÓ¡z!¾D%¼&}ì(7’›¢>xÏŒpÁ½­0@ÃmÕ:<ˆÙh	êdÃÚ!•f¥İÔ]¶.:2ù·'’NáíGÚ¼ô”ì,e¢ìYĞÚ®ÉÛlÔùş[š³ıáek»Um|JìYw\÷urƒG
+«p6ıŒF»šÏÏ¼l8o&¬àu>rÊ!.çò‡\ıg ©éıÚ&°D@ŠïwIE®› €œ"(T€ 'ArrastrarSoltar/ArrastrarSoltar.v12.suo
+ ”±TÔÎ3ª0‡DDC#ò`X½á¶6û†øg0ccf¿€Àm÷¯··¾8òm‡1ô}Í)ÇÃ¾;Ç3{á7{¹¶†$Hœ$ğğˆj’ ‚„pPMIàH"Iàx„DˆHGˆò‰HxD%[u›UWy›óÍø6ÎàJ5"Îy™y™w•UuUuWU{ü¾ÖşÚïİû?moõ]åŞŞîeíÕ^Weeêíßğ^ßµÖü7[ıQ7·ÓGTCL#~Û¢Ş¹®‹#DÅ¬vb]SAÖğQ’_ÙhvˆˆÈ.rÈCºôhÚ>¶Tªı…™¶²Ì÷”´õì˜Úğƒ‚Šñ£xè–Òºa8¬¸*Kı.oPı‘¹¼.7(³•¹*o
+‹Òş†ƒœ6ŞÖ`øâèB:$÷©–0»€“D–wÈŠú!nR$Ìú¯Ø/F{ÔÛÕ°|“H+Ï>µ‚½Ÿm®ş”B×ÓÕ0uÒµlÖØ0šÆÆVµƒ]+²•°fªß¤¸ +“4‡mĞJVí‘ïru*¨2¡J‡*$®± Ëìİ)_ë¼®mö³ùºv“ÇKÁ§’XÛƒî=†¹9¬›ºeà•×§oãÔÍ/¯…x»9¥+¤p)Û&jµòÎâQ!½šM¤®ÒVÖWk+¶•ÛÊÛ·•¸•g*ÑìÜ–ö²Ÿ-q1ˆ=ß3WÎ|»IeÒ-‚ËºdÒc}BÓ‚>	3‡ãÕ³Ï°bî½lÙÍû{6zÜ§Îá½€‘óŸnÆ&qò[9ã¼nê3O>ÛS§ÂQ õ±©Àym™¦Xò ·ÂrhJm;(mı=åOO™õ@PM¾xˆÇ-\çYØ;*÷+–v„¯ˆ$‚îÑŒ\Á'†B
+3Œ”R6Ú<Ô-˜çKM¡(¢‘>.0…¬Ñj]#Î+MrÖ’ß)òÂO^v¶š	/ŞĞÍßœ"ãˆ]ğ]¦K´Ûß^B0Æ÷¸ÄVVD³Be ßéøò§‹$‡PotİÈ@«¼I`špËÑ|j
+:0KO#fnCvD®^îíµù€„/0‹K/{ãE3Ã*P6vA}€1Ş¤²M+øéÓ!¡
+F#W˜-»ğ¶Oğƒ'Àúé-mSo Õ¶9ßCß²r,ñmS„±óf¶jİÒOE4â	Ô!ëÂ	kÄYú"¬¤€™),s^–»äÛ|A×‡d­A<ƒ?HÍÍ<ó6ô?WlA¶Ìi §Ş®“~nR¦ÊœG7é9hDµnæ‘i€C^°#lSè+¿Œ!3³0ñ‹w,À.pÔ#À£ú»Z„%zòÛ	^/3<BWµ	ÑÜÒ¡	§l|e»1ãDøÃ@LÄ€zñåÍb àx´q­«Iòvdƒ_6tÂ9ÕÊt"¬Ú®°ë
+´EşaiVTAx=ßŠŸ¸©çç|™ï‹‹âğ\ƒrü$_‡ÎBÓıåªüMü[äU;D…{x„ò©"ˆŠµE[Ì"®úÃŞÛûü¾_+ãò¿g§û{ÏãÂo>K­3cín0½o“áó/öØó½÷ÊŞ~g2§ÆvcrşÙ·œ‚[<`æP›ÿ,'(ùavÃƒ•ôã=P] !3Ñ5ë•ÀÍ¬³X¼pÏ¨QW’Pø=Ù
+ÖÖy´IÎ®NÔ@œSù‚k1…Ñ3¾¤qÆ7oË9­ûaå›A1»Šl€¾B%ñÏÑÉ z>IªÎÑ=@)ØÏá#±GQpÄnX ê\,…|Å²şYƒdo‘Ìùòı™rc.‹ÄšYË¥ß›
+È|¨Ê|²*æBaÛb·uè‰|;ò™W°øÃp|—İjâ*¦`xÃË¦geÄõ¯ôŸ$â´ÇgÜo}/‰gEXƒ“Äj©Èr?ˆ6£f$Z.hvŒ–v)ÍŸær1tâšùEËõ”òÁsA‚âÀ®j×Î §÷UôDáåÃ9™”¸uyÚW¨%˜S¦9ü°Lmz_*(YÈ6(DYé#v1q§6‘¶Ò¬cœ"ÇZ0ÂaÍ)qÃ6]	HÓAµ^O4µ&oFÿpÔ";Ò¦Ÿ³#¤%•l8Ö	åm'&F	iØ¤W‡,6Ñ\hÛû5üùõf wó‚¸Şˆspò‘VBTÔõÜL›¹dŠ
+ûRîH¨ÄF½úyœ¿‡W¾ü__ù¢ş^»ä‹«ëyöğÔ:É2–²‘®İü²=ÇMáğCµ#ä—µ/_;2^#…Y£1W#—õ‚­‘”>q+wLL„y*>Qí½E¹£óTw)S1Mèt	®Ö-Ç6S7£ã}ÏÆ<wD[ÇlòBWâvŒ“oÛöãÚ]À¿P›İ€¢·ƒÒÔ…˜&íC<cAã£‡Ah¦•3`R=f_ı½úL%²KxÄ"oz7RøÒk3gxÆ•¾!vóE’Û´9Ùw¨¹.î…Ü¿Ö,N1Ş:ˆ˜Êz{o İï«Úlö+ Õ qøûºßõñä³)Bt¹réˆµ.SWpÚ}—‚Dm¼²Üç±nBu™ƒFà½ GÅ«‚½°åµ‚áVÇŒêè„^ŸXØY®Îr”–m]+Ç ÚÚbö	¹8ØÚ×b›üsÎÍ9&…€SôÉø)xg£úËíL"Îô¬p:&SO,‹õÇ’uô¿i @íÂ8mKXN.îÖƒÖÉ&îëË4õŒg;-CªŞ2äMåá~g!Áï¿UávíÌó>x,€Ü—óÒõ£ej\O›ÖâÇt#{z“-]dîº9µY‰	_„i=li|ô‰w¢XøÕ‹UC<2¥W ºÆÊ
+¼£Fä¹¶i¦‘8ûğâ%Ç„Ò2µ¶ÍŒiöÈã‹½ºÓ"°fkk¹¤ÍßNàîƒ4~¿iˆÅä.nÜs0Ô›ƒGØb&+ÂMæXØe(ÉÕÎ·Œ´~q0Sªˆ¬Ve²­X$¸Ëß:«€™á'G#W	]ó`¸ÉìÄô5‡?šJoUà|mV#º6Õæ¨©ĞŒÆëÓÀ8ğ³>®6Â\„àUá¦°GñÒÿ eb„¾X¦!	Öº„aùÊM ¤Ş&f%'	àÔ·÷¥°ö9áì¬pyÕ1ùoö*n$JËïÌø›•¾å;Ïÿ÷şûö )Or¿}q9Y”ã+±³ì›1¬Èj7F.²ìØç×¥•Iá{øP®ô.›½jJUkxh7V	(Éñ{ó%™›	Ë™MzÙíßh*õ„»óâ÷B,ª\dò½=¸ìÿ¿vc¿>+4MLÙy9W=¸ÍæÕÎ\uÊ{s4r¾rãWçŸšx¥ºÚ²nãIäS[ŞÂµ™Oª‰ğùã.T,&C%şéÑ7+=5ïî‘İ™•ëó+ÖWäÑÿ¶y0ë©Uô>¿ÅJL[ô”ÚàóÆšËœ±â·ğª0ı©fD0ó2¿Ç-Ù>¯©ñ¿)’?/áùRŸ)ä0=C\òo}7¼«ƒìıùI/û„È™½x‰¯ë7-Üz)ÿ8 A9G´¯ù mş÷îŞó}îgµ×zö¦íßëø¸ŸseêÄô®¿¦—ññõê·²¬¸eìsı…ßäüx£ğl?ÅÊoİÜßËâ÷»ç}?Ôæf…Z¬Ë4Le~¥+ø{9Lé¢ËMÙÏìİí;â·:%'¤A`»”[ŸCÍê¨‚í²äø¼±NQ HiœBçnñ¼ãM…Ÿé}˜©Í&*¦4äÎ·J­mˆ\
+ŞWM“P$‹‰7 =<b_ÏŒ1Ñ‡1pûšŞ!/å<%Óšc+şÆFizÑ¶ÆF'YEĞİ7±bÎ–+¥]x° Aµ†<ÙÄsmfúåì«˜Qña<}z¢C·ñ¹0$HÀ“—!œKËözğ$^äÇË6˜Rr¤dñy8—Wñğ0rG¿–;ãd¾¿Àj¿ÒS;ô"oB‘WvÜ£ø¡¼m¢'ãÓÎÆÎº´uhÁ3şvjz4ğÏÁézsY¼+N_ªÔ‚JA¦W~ÿOÄY¥Å¼‹F.ù)ëÉ=Ç de
+šµ×ò \_t%÷SO«Â–Fß
+öi_Ôl™ïEg¹<ŸøVú ¤7Ña?³¸¸~4^?}¹¸µylùı»ï“­ëU›k¿­N'ïæä÷ğ”»+î³¨´ÄØI½¬.û˜Áùà˜Š7ÎqÆl«pjÅç5€­KƒŸıäé?™ñv½¥æùN×ÙKo²ë§Ú‹7nG;ß¯õıŞÃÙõ2ş8ùÏœ¾ÑAÛåú¸¡œé_ğYVœÖ3¾>‘<ú>}
+yÁ/ê}=›ãYÜ:ú¨'gïŸÙşS“rt¼¬è”á¿øDßíÃ±<rz®¡İ<ºa³RdÜ
+<©üùô‹7‘JıYóÂcûe•1»¬ü_ş®D<ù˜Í+3åÍL	¶›q{X‡UÇÅ­»O]Úä6ÃÏÁì¡Íò ûo^öÌ?L[ƒ¥ŸvéêŞ§™ıŸçGçØ¡œRY±‹J      €  0ArrastrarSoltar/ArrastrarSoltar/obj/Debug/TempPE
+ zeõ nÓğ‰âC      €  )ArrastrarSoltar/ArrastrarSoltar/bin/Debug
+ M4ô nÓwÃìC      €  )ArrastrarSoltar/ArrastrarSoltar/obj/Debug
+ M4ô nÓÚs_³=      €  #ArrastrarSoltar/ArrastrarSoltar/bin
+ M4ô nÓ]‡jà=      €  #ArrastrarSoltar/ArrastrarSoltar/obj
+ M4ô nÓ¸:D      €  *ArrastrarSoltar/ArrastrarSoltar/Properties
+ M4ô nÓææùf9      €  ArrastrarSoltar/ArrastrarSoltar
+ M4ô nÓÉiĞ®)      €  ArrastrarSoltar
+iİÓ‘ğ$Ô©ØN:Ù´©‰
+ '¬`€ OperacionesConPolinomios.rar
+$Û…~b	Ôfò@6T3TDe@UTiˆ‰‰Yó˜í‘Z¯éôWoÓ`nÄd:á<+S‡3›2K"S$˜”qğ6€Ö-A}Àú™âÿïRMnGÏË@_ïûšãşØÜû/øÎ’6bt=ÿX&·1¸/°³¶¶1¸ €¹9µ©±µ¬§¯ınÛ›‹@1dge“»-?İ÷I”h€D¯R³2 5¾˜¡eøÚû-5fw!¾NT‡®‚‚İö\_àÖÅğ*Ç;é<ø…÷îáÍôœ¦'8”‚„Ô±¼ß8$2²_b—ó2,A2¿BH(‡Œ5æ³B£şìlNi´M
+U¸îã¹«id™’ú¶q^{5íéSµlõ”ÃÖnÚVÚYmÊş3#Ğ \Ç=vÕ=ÿcÆ’“ı$¯ù+Ï¬ 2-!1°9²ÿë€XÆìÆ[Ô¢¬.(œü&7Ø^G,œD><ÕıÀ¬ŠÍ$*vÂÍ*D`ç8"˜ÍäA‹ºÖÆ¯E°¤t;;Ê‘aplÊ à’ØrÚ­²ÛG‡ÜÖà‹X“WW…„‰«ã£ÏÚ_6Ÿ²g'-ˆØß‡ã°×0ò÷'"Şß˜Ëş¹¤>Ò-ŞíéÀkïºóoáÍW Zô7íä=üİôùø	&õ’9xä/<2ınaËŞ9SM<àPÙd‰DJ7jô	W´æfVîU‰S7wŒy/7çšÁêÙ´tÿvÆ¯¬³°tÚõã¿›¢£W®³³mzÖÍÓ{¬Sâ'.ie}“Û‹İš™ìd!dn–#:ûØô=>ú×¿'J‡-`ï”;	Aë´hwıkşkU[Ó+…‹atœ¿zÇ¼î»Óîgï|p!zcËùÖJ¯ğw`$N;ìƒĞğÃòÄ¤U÷#¶Ué@Ï^¸Â¾ Û/súç«qôÚ¢!ÔÌkÉ¿²Ê`ñu®ƒV_˜F%u O´çLSOº#&ĞŞrl¦¹<|~ê<Ÿéš‚¢à‰•·`½df¢éBúïj!­—ÙıÁ­™°æ,G7BRd¬yÁ'éÂ¾H!æSW­•wØTŞaO¦|Ñ¢P6Æ''„Ú†‡m’‡¹é&ÏFÑ«ÀÑIÌF5#`Cû‘üÏGzÁ¥¥/ŒG^óz¹¡~q>R¤úT‘¸I•$n€Í:Ë#@Å—js"&+\eW‡s€‘ci£:èP~‹´ìËcÛ“ô½„™öQqÔÀÇÇ Œ³Nº•Œ!V4œ 
+wÏ]Bó0È0HÒwrùhî‡Fç;áÅ
+ë\K3 qÁ#
+Î 1è(¾ÈåuN–³
+?˜Å¡Ê¾ æKuõ7&EµÕ§^	İ7j}ó„,y‚v‹†ŒÏúlÓ‘·lGı\LSDøšm}DìşQÉÂØG¨¨h¾­K=šx@š¨M6o=òXİE1`)6=ºpÊÊhVĞg–ÃH•òñN -ÅØÖ^²bé	*+wÑºÁğÊEH5êb(¯ÈœûX_¶8t™Ò´j$~§1ªÇØÕéyÎP(«åÏ#VeøxšãRŒ”Ù÷¬ÿĞA¶BßküKQÈÀ¨jŠLgø”Oêr2‚ø'ºôÙË ¤tĞ®¤T¸Ùˆ‰ÙïÓ†Yîô‹§
+	ŒÒJ$i nùùÆDt©…ºòYí‚*ÉTYˆ·â,IcÆ'ä˜<ïù!tA&S1L3@ <-jITfÊäÜÜ;ÀÔèòÓrßlÖxĞÍ+”;ÔªAs]ÖÛgàLğe94HõœÈ`‡Ó¨8êA<!j‡š2äÒ¹Ö[øÅ5+‹t‹RÉlMH‘¯JP+ÌÛÄS|ôüušİÆŸDşáLÆ¦ÿT%Éİt¬Ä2$ágĞ+Ò	dÈÍ:@Í<öeLm^õD‰Êå.U¾’€õîÍÙå"éc:dvFª¤"ÙEuìûú0z+ê ÂÑ‘Š0Jğã„±Æ¯hxÇXÊÂÀïŞ9¼D@¢S/dW"^irc)z­şhÉø31:$˜İ–H ÿ¾8Gƒmbá‚£ˆ?5-Épàyq‚"Uˆº)üÓ­|:a¿8ïV{[´øR‚o\UyÖÔP¦Ù%wŒm¬Úµ}ÀdÓÍ§‡ş§£
+æ_d‘øŠ©œ<&¬	f²A²`Ø¿­ÎSGŒÎ(3¤nóWÒÁ9Ÿ¨ïÙ¾6t-te°ÀĞé%ÆUÁ	‚6¢#¥ÔOYÖÈŞ'!ÙaÄsp!3
+
+ğØMJ&¢p×ÒŒÊ·ÎX.¤7èe b—„Á•>ÈE¶]o^˜-·œk&h&0UÔ¯‘m/¹QÆÄ6I} ºdñ÷3ïêqhÄæ	ı}«Å~a¼^HKú0d²²WùÈÅ
+GÿKæYş±Í`™¶Y{ƒœ‰†9jµ50.#J³ÜcjÁÏQ4ªq~X§ÏjÜÎKø«ìb|­ql(µ¬ûì§ÓzÅ]{œc?ëÀ¢Ñ,ßÇlZ\ğ![õ+Kß…ôÈ1ªT úÌ‹¬ˆĞŞ‡I ›mZÀ;Jùs÷(˜+¤daôgåÅÈ,4ú¶Ä÷H°RtõëÁVó*‚7Œ:|PT©Y}DcPg)Œ*åÊ‘®Â‡ôÙ‹½Cå¹BŠXÑ˜0ó”c8Á©VHç+~±ÁØmH–sÀi_ÆŠ÷½êÖÉ#üßn:şÔMŞ½ŠôKtr‰Ï‚k†¡Y ‘'
+©<W²p§Sÿ=rk˜Qëæ·Ê±ŠúŠH>7£L™Åù]LˆK›ŠË‚Á}œUZAÆ4D;¼¯æô¡½«Nw½¨ÑÔèË¼¼vì?xhÂx~‘7W³Ñfûp²t2šbBÓy´¦´Ù¶ûó×ôÿÉRY'Û‡Ê‘ Û &İ²m½IÃ,‚ÄƒÄ„k4p-a\‹¡¢8’—ÆºÕ:‚/k°UKlà+FÄ¾Ö	š€ZÅ–ò;İGš0æÃ›1	í	Şx.˜&E"ˆd¡°>u	2|ò.;ÏÿèÛpêsÄU`Ö9ó°û8#DxrAº,”Ïs™ØñßºôVM
+	§Ì}<#!¶µ8O~»Jœ§tÖFakJ€-Hª_a·Ú™Bsö
+ˆaBÂÙ Št­BˆQ ªUÆıÜº0)¨Æ¦ãœE¡ú…åGùp©wØG]ÅhFÁª½N·HË•ìAhà½Çñçt!(cB	@¹†íá,1·Êw¦¦¯Õ¹³˜fSá.¥	vLb=åæKQétKñÿKÀ”ˆøEë²)d;¤O OĞgã™¿0LÊŒÌy—ZıÁBg'Ñ­²åçæñÑpá"™YplÊªµx¨·pO,Çü0o¤ÕáªÜK¾/µBG„ÔÀ6QÒá:Õèü±ÏGÃO0âÅÆ9×”ï—BéÕ0,á)dş8£0\èç¨ş5ë¢eüó¾¨æXqs4¸èvíÏãrÏãÖ<¸ó&fÖqév-\Æı¾çı”#šçÏKÖçò‘à#9‚@:{möîâµª)9‹¢½¢÷Oê¢	ëÏŠ±©îaHk&«µYJËA»–æ 6¶?Â ÏâTŸyñ·¦3¨æÈ9„•hr„Úu%#ÚíùğŞïù_¸ˆRñ«Í˜pwÅ§„cİ²®ç* ¼b"J“J§P5AÕR¾…K5‹6Ñº„9úW#£n9Í9§TÃ»ŞZ|5†à]T‚“b³ën±²:HQ¯ıHAÅËòbGGsè¶_Ê»”ìÂ£ÿ ÌyXÛwˆ8Ì©½ïH´hºp×öáYÒJ´tb€@M!·Ééºÿy9…]ÕÕ õ©ªûíls¯8Sq¨úfWµ$w2=*øñA.ñÂ|Nˆ¹ œmHÍ…bÜBìH.u….êÁĞØaCÁ.´á6Üqd—»°l_5ÿıïSöÂºÊ¦?"±)u04Y¼Ô~Ûœ¦Öú0œÚªyE’â!G}¤–vƒ‹ˆÉTN.úâ®|¹áÌæ?éš~WTä4ùY­Ğî)Æıô[\‚'’±¶¥–	'u'´ ^‡æ²‹g¸uav
+*–tr™Ò…_juk /dµzº‰ÌšCuÛ¸ây*kM©´ï0íïUé¦/‰…•«ªÃwèšF->šÛşLQM”ÑíúFØÇ,¤jÿe7vñÑtfÀ±ì†úåœ\Ùø°ª“…ğ‡RCUrş—|`Dø`\Zö(ÑFàäé(0P n:bW!-@E#o#Ï@!¯éxÏO?'m$áéÇ_£h×+—z!úšîŞ^sEúùØ.zG=9ÿ£ETºp>ÔØÛhßÀCÅşÅGËU*…ïgI;ÅåŸñì¢ªS3—,PÛÓÿª]Œ:µN'i2ßcŒ|“6ÿë5w©Ì82è×e‡âõÎç9Ó õØãp1æûÊJ«·:íÙqÛëNÜæ‘B4ÅJ¨:XÂ0c¸<ÒU«¿èÏ[Ï3ÖÀÑş[&˜Çü%<1•©‹4)¿ gE¼*.›byß€f ‚óp}dZJóåÏÀ—˜N°ë#Ü÷;ÿŒ´raÂ níÆ	(>Ù¡¿ŒŞ£Éù,¯š9¹à)ÎËV§	xƒyàc@kş¨^XU8€AyT(·éõF—({“FÃ{è^ VY?’õ¶°óás§=“ -ìJ±÷ˆ„(i=öoàÑ…ù¿ç›<B(+„¼“¼QMb·Ğª)åËš¼2åÊ™µÖÌê\7<>ÄXôëFÀmusT'›.¸OHá‚s QÜ·İA“w¦LNÁ°cT—şWİÚÃ^l5yBºÑa`rBLÇ¬¢làà«jP7jê ¬£Øüóş<Åêˆš·Ö{T‚G©v\$4|¥v9Õ:QÒåÙô­åş¹¦¯5^Œ%6;QìÔRØn	õidÌsßòX·YÖ]½÷¡ç˜#xî…˜%Ûã*zˆ”¿„Ú93Gfğ±•›fGùîÖ¬ãÛáà1^S¸‚cı)AíÒ†¯¦„ôŒåûì¨öªæÄÄ”ğ(¨¨Æ˜1"=	ÇW˜‡%zãDÒŒe„YÉ‡Ì+;~E	NŠıÓNólÙeşã¸\;wv_
+¬ËÈò>o¦<8>+ùq-˜xø£jh©ÚÎ¹ìs÷™íQºò±,ËüKÍzö6b–Ú°'y(¨›u‚ŸI•"WÁjÆ;¡˜º(J;•#·ê€ü–cf¼/j·¯M;a+±t¯'Û	üS©t¾­a-)¿y‘Oa»RM›Â µíWq*ä›}j
+»]¢Ôİ}O€ŸX?äŒtyÉ âÊÁoòÖ!c].ÏĞ¸­5çXPª1p.HŠ‡ˆ“‡Nª nàªšìÜë‡Ÿö•±f×t¯(íK‘må²”¡–³E)@	[Û+zU< 0Õ˜å®OF‹;"_SúÓ±QÉ\Àó:sÃæ‚…Ÿrµ<Ólß<¨“’’ZãY	¾ËÑ“™-aÛ¥•I.å$i”ƒÌ{»æYÑ“|‘gğä&è²Z­ÙM¼æD£ÅÓ»ë7à¤¯uu¾W×ñQšûĞq²T]İtZ×:â'eeXa´©ƒ×	n?¦€Z§1™ï{Ò“psGãÃ´>ø÷ôaµ-`#lÆFòPóaªaç“ç¯8øø8¨!çÆƒyI³,ïn\ˆQ
+^sU‹9’U³ß%İ^ê?h±=Ùn6ëÿp”å4åYraÚım*Z¼ê~éÇù¬ĞvWÑæô©ºWö„\•w¯¦¬D•´Pü¿ÍdYšáZè†FXÑš)ŸA§Z#‘gPZğ¤sH†…yÜwD[”Oƒeôô˜	,8>mûÎƒPõù†+¤Œ´åÚ†.}JÛ)Ò¬÷¾c±Ëß¾é	ûáÅXZĞæŠßJì”×ŸâáïJ|œ0
+†ŸæÔvExM«ş±	f)œ‰Ÿ~AWq­Kÿ¦Lfš6>0ª¶-Å”²IõLhJ_7¦{èş×´tu›^ÊÆTÚYVn9wº2Ê#fc3ÉşhíØ®ov¿P*Àë³ŞïEÈN‚»¬	^ë^íŸi§‹ĞCıª_.CÀËÄFÊ6(Öàı¦_Œ+_ÅÚ"ÎîÆóJ¸´M]çëÔ	ËvrŞyÄ}¹cÜòÎ‚ª•¥G^%··2óœ<sr‘gÅÏrrqùğ¢ô%£>õhd°	°+" :ÕsşŞ3 S\+¼¼j›Õ~0İİjË½ÓÛ€İ†4^Ø4ŒŸ˜6KpdjÈwğ_©`*ˆÕœ-Ó€M$äõ›`Š‘Üø1 õ	Æ8ÛÆ£õ—ôÂ*©oğ
+à!+P:?µ P<öÜ—lTÖå“Ìø	 ùÎÒCì2Ø¦VAWÕ6fß­„YŠ6wTk~Gş£ßğË¼!Œpƒ¡ÈSÄ0Cá†a—îO¦Oûwÿz°=6âP¹]¬´µãù®³Ó@`œ¨,3¾íŒT!*×}e,dŞì¾'©ç¬r	´œº…æ
+åY	Ş%°¥YÆh®l)Œvá7Ãe\„º-f&«7Ç®ô•ˆäN^VuÉ4¦5fZ’m•’\‡\À%©#Ğg» ¶!nÃf	Ü›=H1<êì¥c/±¬ñ{Šj—>gHCµƒÍh=®?%¸øp2É“áeQù£^˜w%»‡ci„·‡C}apı‚n÷Ÿí‹’gm).Ë“•i0úğÅˆ5Í§•Â8?iüX³• 8{¶	ŞŠ,AoCµ Üˆ8îÿ¸6Z	š‰ª,Å>z ÄÇ{•Pp1Ô:Œ O%Ôcı*Œ|7Á¶áUĞ±Ì­ƒ] ì¬iË ïˆql5²®|Ü¦	cšp-gEcÄµW¡ğàèğˆarÓY~ËœìµroÄ“>îÈ×½r-À\ÀÇ¨ËKêÌÀw"Wb«0@_ì`ìUÚÅÚhÚ¬	ª
+T%^LWˆâR=™
+”R ÿ*4³vm½kÉÁvãØñat‡7X‚vsÁv6ºx0xê¯ÚÔ!(fhPÔ=ª‚T>Ô?)üjÿò1Ş‚ÁıWïÆKbp€¢z/j/Ô4íÂ®`¥:yÁoÿ¹Äıh*É¬É²Í?ğÔ¿(]f].h]UÛh<j<ÇŠ+Âll	¨Ëpì(ÁY†,Á¨Ş<ŠjÕ£±‚g»ér6Ú$^QZ
+Lo×1ŸÒZ¢¤Ï<ØQÊ™Wu ­y¢P`´zß G#“í'›°¨ŸÛ0â‰«ÔşÈ„‹ısí}ñ5\xJ/æ‚æõ$öûÉã{Ÿ»lò¥^ús6%£ıøR$í×Ã®è‰Â=£BcÚşJwmI¥M¯¶Ú6n=Hİ&ÏŒLÖüª¿ÂD¼R·•^O]“ªŞ­@yƒa—é$­³kçv˜ŒØ›KG/4Íï^û\H„'—.ïºªJ
+Ÿ@E%ÕËÔÛ‹ï€ı(q‚–"{s\\0-n–ÚuûŠõTzœüãyú=*êK‚ŸaÜ^Ÿ°
+†jtßŸ7ŸÎ¦ùmşØ÷yKGZäÆXøÅ•rª¡t/òXÃcù-bÕ¼Ş´^œ²›ŸÊ¸J®/­O	-OLBvµ‚¾){	.¢8–Û‘9¸rSZ‹¢Ğ(¿™	¶{¼¯‘†¿»'/õ‚lº>V€^şÊÖ¹çZwT —G\”ƒ´å#6%„¢Ã­«]wœäÍ>eI”Á™ÊWÂ0/ÉÁ˜F5^,nëCÓ­À—xÛ/|oWö]™Ø÷ñ×ÄgÓ«8qÅöÜ"İtÜ°„Ev&úW®7x/à—è–bX%(’§äÇ{${á	6İaè 9•ÜFjpìôŞ\ŞGN¨Ó@»Âo‡Jo»Õ	éä%´È=dÈ|AjÇ¼7e,qËgZ°§ÚxÄÉ€bF`@	˜“23Ÿ^rætz6Pyğk]76…Ë|Ö‰4oí8y¬‘‹³\%”ÙîÿCõ¨Cí_[ñ‡¸6kç©K¤ökÏåÔJšİïÇQóétõqÔ–Ô‡ò›UÒò‘ÿ1’Ã¨7¬z“ê\Óü8ÅÛÜQ¨8h½ò<H—Ri—œ>xaç‡¤;ª9S¯áñ&¯¦2ÌØÂ~;š]k	µë
+°T%îá9,ÛÜ¬à—€F!ø[ƒœvS>1³'…ˆòI"|Û&™¼%„œ82±zw@±ÁñGfK÷šõíTÖîM87UJ89©oXÌú$^E¯ÌCå^Q›&nbÏÃE‘Ç2šºFÜÀIl%r›ëLíÒüÏz!øÖ=ç=¿}=M±¾N}ş~'}ŸüĞ}ı¸øfsãk¿LQÃyÄ¥TÑC?›ã!kÑôO9Ñ9ûl³L='EŞVüˆ¦ìÎ]Ã>Û¾?òQ­bRÉÅ¿©sÒVIƒ½	kO§ÂèÉ…ğ¤Q\ıs(ı«¨ø‘¦2rI¶L+ñòfÒ‡»j¹]‹êÍàüpOíŞ+ê*KËj.<ÊnúD)=~^*«à=²~u®Õ^ke¬øÿ°oQwòŞEdbCá.”_HRµGZšw&eîVÀ÷¯+¨ŞÁgLüVÃiœŠb½ŠÉÒP&ö¾ï¸{(3Š×R#ĞW"*|T9æúS‰•4Œ’(–GÇë˜B_h—6…‡fÅJû¦oæ:½DM11ï½)ºğäAçzgÙüğo$ä´VŒÑo2å‡öœ²vÖú­´‚r¾+[
+yweÃÎ…¾^¸=q–.B°°™çq »ÔàFPœQlàZ<!Í7º?ÚÀTùã|Ñ6ë¤J×èK(‚7A(ë‡†"3zŠpã‘„'Ğ*k÷±
+Ì2[Ú…«øE ™h¶ƒêS/&&'K12”*³6ÍR"§úŒ2ä'šNû%)€— µƒ>”'¦;+ UæĞf~Ñ³\`
+¦ˆœÏ@/„—Úı~7&8E¼*UIèÒ¸8Z#!"»°A ‘Dé	Æ |äˆ€³ÄÍ	¬~Ğ#
+¼+ìï¸*Åà‚NTÉk–«&œ‚ç[+¼¦ŠÂr&WŠ~…£íWˆW[j¼›©Ş
+!eo8Kµ-æõlßo¥P]…oÔhÅÄ"òçö?u;áÇÎ5Ğ±·ÇtÔÖúà&àÕ›sé8Ş}VİšZ	 ìê‡iáA¦ ÍÖs‚{êKÅ…HV½Ì.ël†»qşëØhÙ#(9~©ˆl]ê· Î(VÄ¯‚RM¥2õêxK£ÓœM¥å|@i8âˆ 0´şè¤¾!zEô‘İ?xJC­ÁO–Az;äí´ı%y€DØ+~×LÀ”¶LùBõ…»tšuïY:»ßÿ$ÄºÔ™}.ì“n–cçÃŞ¾Ş|…ÿ-zÑa¾ß)rÒĞˆqîPÂ}í•{û–=/>à¸=ışC^ïdÔ$“xyAÏjBZ›QãªÛ¤T:¬‡Ò1>?Ö6ë–kC©$Üî\ISëLT\Hº»‰?$‡5şÒıx? ¿Šà-ê‹Û™äå™è±1’¦{á™ÌıµC`~1—:€ø®ıp$eÿ3^Iæ{”úÉŒ´,{b&¾s5ÿ"$_?q_Ÿ='c¾?JO‡´ıÖ8~öúfên«c©´~=œÎ`*~÷0ù;íÆC¡t5FAs_®mHï,Üg3¹m:çiµi>ÃRCÁn»N»M_CrûÌ¶…vNScj,à\›¹üÇk(6j„×%Q~ş.2å%¾úú7{âı+>µ>^æŞÈú}«n©©ß{ÿŠ¿/¯:<ÎYcR÷/jô—„Sˆï„
+ŞˆÙ(Š\%OşyÏÔ%’#´ïÚ”6¿K­dtğÑå£Ğ½K¹h²BÉV+àsüxY‹dåç[¾Ó8¯	{˜œ-º	\´ß2ùn/\˜ÕİçŸ©¸Xœİq›î—…Ÿ¼İËG\WOªCSÈ=ÄfNçYÏ0ûƒ6˜PQ…®q‚Òş|ÍÃĞä¢ı‡÷!¨ÔŞI°qû.C·ÃL£Û—Ô\fû•fè+±HA^çœ«¯²0¹ˆO—ˆ>\4\øø6œ¶J*Ê¶i_‚‘5áY ±ãKC¦KqÜÆ4ùdd…_ßzÌI¥k,f÷€ÅÂ
+ko}Æ[?¡¦ÔÜÏ¥Çße/M5ÉS†-É5AÉÍßµÓÜŞ¶»oÁ–ŞgÍ6‡¶bOk¸Ø^/¨sÛ>Ô·ß¶ŞŸY?ÃJÿŸÉEœíw«Ä\¿ÕTß¤ä^W¢Ù&¼+Ìn5ßq×İük ô_ÚãÔ_»·ñ§Ñ`mÈšj.W#ªH—^/w¡ÈS™Ş:BG}ÍI¯¤ÓÜ>$‚}.÷<Ÿo`_4'‡ÓÆÜè·"Ì*1v9¸î;noÌtâ{ÃóÖ‘¹©xÓ£÷•¼#>4¼·ò|ó€ù	Th|/<¿yü0ƒKüì:ï…iJ“`Ú)Õú|rÊZ §ëœ¡%hoeÇUÕša6ò“ób$…0€®àfşÙµ!.ššvÖ—×.5¿¸ {ŠœE¾Ûù.\]\_1^ñûe6mÛK›Ç×HËÚ]qN¤ÿ4_$‹í"=µ“Eéà›—w·å, ƒDñJ²ÀåéèœA‚ÒQÊ½eéR&JHóù+œí5Âb’CèÊTg+Ôëîğò3ÍŞ!Vyƒ›‡È_?â,Õ_x++AM«°Ô­µ´ñœc5@IR-gz‡/mk>ÓÁ-·û^¿B^Tbì¨·)$5OF)ñi˜(*2Ä36¢³ÿ.,?1½X™^½½“ˆ5 ëœ»UÏ–Âİçiú3ò‰ãÎ¾i`šÖB	Îxú•8tı¯°åöSL”Â:•¯îE¢¹QÍ©šÈ+ÒEıŞËÂá
+Dz·Wšd¯
+òdˆ{3|‰^1À±fñ«h”¤mx€;wjÄBáœQD4àéÅªvòöìŠõ¹C›ÊÃ‰î•Î,ÈœÌÁb‘›C‚å'ò²”§ÏŒTÏÏ:[KLi¢9<5Ô‹H,û¬¯î	‚ïQ!D±«Ñš.ËL(ÎéêoÉƒWB.¨*¾à†|AQ+¸zpÃv’Avçğ‚‹'©T€Èsuq
+™JyNöMC^ª){î€Á.«ñœËÅjR¤GˆÚ~2¸Å¯ÂáŞª¶_ìS±­/–^ıÔCG÷ZÃgI’J¥B„y´²„ÃÕ¶*Œ‡:Ià	dPaoe’íäÖ “MÜBJeú¼ÒøŸr<²Äµ·yµ“;¼Çy\EMdaAïû‘²·jµ´½@]×5-›»‹ãùª bÜ®ÁÍwOW²®æ2“ËnòæAÈÓy@×+GMo;õüR®»Ã®Cı±ÃÂ½d™â¢f0	&¶ ß7ğ
+XåjNÙÖùÕwÃš*Š­&O*‘i®šán˜ßÜÃN—V¼Œ?¹õ'Øê
+i€@æ¯~gßi]¬Š¬àkÑ±ÂÉ·şçE‘€
+T)Q›ª@Î3—SD2ç\šh'h«c¤{ò¡A{uäÓ1Ñ›9aˆ'ÃàÁQÿv¬_~­.YlZ’rc¸êêR_ÔÄ(t!£H"k—‚ Êş*'õ±ºZ;‚<ø´<•)¼›]1S[ß\;É¶ ²‚ƒG¡ñ˜Dv¼
+[8	QPÒ8yéÈ!jB§;~Ìñš‡ÄïøsøzØ`²dä¹¥ãªvĞñØÚ“ä˜Ù•µ•›úá›éğÿ¶DÊd¦Bìü9§ƒFú¥u
+0´Ñ	²ı+ºh	"‡Gn?ìõmıõ=ñ™æélºÒ±âµÄy‰~šâ^U‹—Œ»ëRwfÖùÓÎSDLT©­_V¤·‡([ÌRÆé6 €*¦¦×ÊñìŒd'!]Ù_µu}˜7Š¨º§©»8àA%½ÆATA]ÄS÷4ÖCí˜Õy›ù!­¤m`î óËÑNDU3Ü#Li(S¬•ŠüÚ¦ÙÅ½ã¼ua^8´+q'?6‹å©…ë–'º(f3 WŸ™aXX®6ÙìE9m Ê±2ŠV(®j›¼5>ÍùË’Õ¯=zêê›„í(JK—¿»ŒN¤LEêhJ¢ÁÙŞsœŒ‡´mnlš[Ô	EÔJ:)q[È†›dü•Ş@@pÂE£•·Ö­%q’…ûc”²úáLSS?$qº:€«ûo­ĞZ¦.‘İJ’ U¯åVMÃÛåÂÔ#èzcD¨tVXÿw7ÇôT¡é_î«P/ÖO{¼Z*|±ôË3üÑ~&y*‹Á7+È²‡™¤nÜ¯ÒtW˜W[)š±ÿ¹W¨”Õ¬JÌ¶D_b(>ê#¦‘0`où 3dA:fÍ]¦!¤µ‹ÇT-fÈ‡<Š•/ñ°«ªÈ-T'J™S»aÄ=aÍ=¾º¼I•Kô÷äÃudÖúÀ?Q'D“kÅ‡·HL)S£$Ÿ¤Æ9KR^ÄÇ±dÄ©%ƒNeqä4¸M\çhÙfÔùR—©•¼(ÎšÕãj[šQæ,%7h£OŞ«ÔQ-ZL‡@£¥±ëa©74ÚdGç%õæ>ÿ‹5®Ùæ©Õ·öáÉ`ÍÜõŒYÜÑ~%´¢±J}äì,¬ ·¯K[ò¾/rºy©VC¿sxu•àÅx% •ı3Ú‹§ÈtÇ¡úª^ÁÅ÷¯¨Ü®•ÙQT†	Ü-=\’3×ô¤ÈÙš%êÄS0%¬¶‡ôÅ¾,{Uñ‰Cü²÷Kníƒ,DNÉ7Ùæ¬½-e5Ğ"ÿc7	3
+áÁ½Î’Íİ«Òõ"¿¶]MŞ‘4¶ÁòÌ•·ñcWÃ Õ=‹çÑ.5˜Ò×ícÃ¦D2ıdKx¨ni¼šê)wMéEÕ8Ìã=\g®‚63+ñéMó'æaOİÇ-ÀÜŒ¤¦ïVÕûS£ìù«u‚bçQ ¦D[<[ø³$‚éöÍ{E ,°(“tµ‘¥ ´ıX]pê/Xìun7,üˆúƒ.v{«ƒ-å¥ÄO~,Le!?Î:OÜgWtw¦—<Q­F ÂK¯<û¡å8¶EÛ›zj¥{6‡u·<ƒ·4%L4‰—éCGjZ¤ krI«ÒŒílíİÍÁ¯'Ç07Öëf`,9’x×€±PXˆÜï¥Ÿ(
+òI£¢gX€”y3GU¢Âü¶BË%‰ï«Ò7
+IÁRe›ª ‘4$§¬,ÉJ²×K˜Î»vŒB¶«l™ıa¤+xÀÕ“Qùäk¡¾ı(˜Ó„•Ê­™^²'¦8˜xnVkc¹qäpÄÑZsÛB|œ §¡C¬HPìésJ²mvÀ„İm×R6şrK} “ˆü'”Mª1½?Q|wLşÏ.KÇøã¬QlMå"qMó0îñ
+Ö% X.l^e-Ø¶õP™PO)[ùÇ¤¾xÑË!åÄÃRßŠŒvóİ!.“tj#7hÿ&E#ëÂ×½ƒ³bÉûÊÊ«»”2ÕQLéZØÚ0Ÿ‚6K’‘ğBñYÖŒZ0ÊÂ¢Ì©A/Ùö(Pñ'
+Æ:Àqû¶>ÑO™OvšÄ-œœ†Ïº$¤YÈbÍäÀúì£=±~Å†Ù¦>Ø‹šúš^M`œ¢g–õğY8B¼ß‚İG¨Ø‚ªø‹²KâÅ×ÉúcB¦÷æåFÃZ±z‘º¦- kZ¦»—p½¸ïDk
+e?§²[6Ø„ìåò¨ºv³"!À¹ÊS.2#.m-ÄeùÅ!†S	l>‰B…aO¾{ôj…«‹´[SÕ"ÃIuó†óKŞ_V9ğ3Jû¨±å¸ˆš€¬ÅjB¯#¨Dş+XÉ¦°1l€T†
+†Î{AéP¼z.šB¦#¹ÄDóím/	IG0è¬rô:öqºİ´ï(&ù^§İKzHšzµ¤Ò:ÆYj¹šˆ{œ¸ñÇİ6ÂÍ:¶‡ø,Ap(ÚÜ!)
+ô07`Ñ—ø¥¢!èHLöD8°ï«¬Äô/±?‚ëƒZ±„Ÿ}ş@ıK+ªLOl{.¶ÊÄ„×_<gú•òÜÎ7÷t= l>’÷Ó'Ì|í¢†<ÍR÷ıL*epÌ2ñĞÏqç©àÉl:xXHQ´g]²ä“Gq$QÕ £f,ÛÁl4-­Læ²ñ­Y³©“³%n€üat&â¼#“ÎÌ´nóÄæÈFP6Ù®û¶rT[Â¶¢#Ìä
+¯A¨Ë^0:8âµ’9Ü„Ğª%ÒØ¼ºw#/|‘† ÏE#„'•[?WôµLçèF Ò´Öx¢S9zF[u=†7ë‹]Ï32m3pL6ScTh¯ï°¥ûñãÃ[‰HåĞk6E	»âEĞÊæÍ	vKPZ452‰}L`:•£¯Pª°áéõ›ÃqéIéö5»eÉ[9ğzí‘Qô)ü~ÊÜÔ„²{'•ï—Å8!èÇ,9ò-›Ë-Që »÷?ÉÉª\`)ïÇ­ÒGSÿ5•€ÒDrÁˆÑ sƒå¿kªIs‹æşæIf$’.Az„ş­Îj™03g^(â™M”F7FêRÌ?sér6øyôô©2äLæUÌ_IaR*°ÀÉ’Õ&’IxçËkQ±so`÷çèş÷–÷Xi¥>X))%7ñÿ¯57ÑNÃÙ€«½C“}~LúGKp0féË™ªGŸßûH¦©B°Õ¦‘³9ó.‘ö8ÕOÒS¶n
+k,8‰1ßä¦'J'¿uÌİKÁ§" L]érá+‰PŞèı¥á¡š!>ÆL›#òÖõ]ã_]qŞ™‡Ûî¼!a/1½+-gQ[Y´âATA©kù¦øc4Š©”ûÉ‚@k£¡W§ìé7¡»~nRaii¤xò5s±uEµC¯5mÅ-%> ìfm²¾2Rqv©ÏA¡ÎKèßå*ù*¥fp‘\¢‚Ù9WÁéÀzURÃãx\PWk^ˆ±anŒúÀniŞ7?c‹äf’xZñØƒ.Ï2§¬ÑÚğñ'#aè’på¥å­²"†³Ìh¨YAeİ>ÿœÖ6›TêÏ¶LŠ‚›ô ¼´²3øsÑæõÂJµ‰á	ĞÀåÔmÚ5{­}û„ªÄ7G½¬õ¡cí£Ëu„d> Øİ“3F7Eœœ°5
+ÎGqU7r3C³ã½\&áÓ™Ó¿Ã$2©&‘ÒXoœë†…adàĞİñlwxë Ê²	Ò­C/À³Ó(¬4Z‚Q0ÖÕ:p›¥!„è[’`Ü‰ódïîÍgË˜äZ}l´7j³ı3êé"mºk`x‰¦ÿûï 8ÖœRŠ'ïVíá”+[<?øñdœv³\7pd{X½Ì›E=pC§ä‡™.6ÏşV»Ï¢e½Ù/RÜ¨‰éïˆò÷‰FTõ§'-ä”¤FòZ«ZnşEá©ó?±Hš+_^TİQ™Ó¨,†*È­±Ö¯*waİÛÊÕ"/”÷ÉàßûUË‡m·TÏ¥¼*cñw\Ò!Ú!’ûïÄ,ğ]ğÉ>Ny?#1b^Ş8€WÖ$v$x² ÷
+ˆ›kt¼ëÀnŸºÄ•Â`x®¯8VZÿô®­»Ÿµğ½fáôQ-§ÀNŸ£šÓÚ+Ø“áÁ²ãPğ?‘ Ùüê_×2^Şİ‚ …Şö
+Šæí¸Ö©”¼b–‡ÜÇ~ÚŸÊ¯‡(ZÆ+ÀÚ‡Ğµªt¹f…@Ÿ;„5¤zErÓõÓ®"W+«¨¨ ÙÖ»|Y¥fú˜Ó¦ôÔ]¶ÚHµYj€U©|+àÎY¢Y¹búâšÌ‘m³›ÈpAe{ÛSš»¸ƒï=­LX¤	(U’ö¹H×°õtqÆèµq‰÷ì÷¿ó]½Èùù÷ÿóĞg]ÿÜùì¿ùßB#P_şq¢·ü]‚;«ğÍíÌL U¸X¤#ÃzAÉPä8KÄ·V–—¶4GT¢¥ú.â²~g£êNĞfaùäpGôéŞZÅ1´4<İ >€bœ§%/øsK‘Ì@;ş³Mız;å£Ö?u¦q¦yºßçùëh%µ²¼˜âKôdò›˜Ø|º#ú{H=ã>2å¦ Ã'^D•æAt/îêõùöu¸æ‚‹tÅ¸n˜x³*İí¥¤šh¢d®@¯t÷B´{èøîè	z•y:\@ø‘jÚ ;Íªİ'Ü	ğp/ÑÈğËîi0ˆí"ñPN§¸H!ğCğ»èÿÜÓõhIo(˜Sñs»TÑY#„„iÈÁ¹¾_…t±Ò_™ƒ"b`à®QÌ:6Éã‰–(ÏµÛD„ÃŸHµàïzÙŞTÃf7EW5åÌ­K¨Í;îxÒ§š¿Qµb'‰&¢ı·Poƒ‚èbC”NämöS¥{å–l`s·Ì|öq‚Lh‡›\‚h_˜”/>ş÷ŞœÜ5ò­Nd$²”99Ì¦®ÿê+)xÜRƒ0Ş7’óåœ\ß³¹LwÄ(ünCt^Bw —›éA…ÁÜi(ò_,¥×¶]l'r¹|RÉ¾®Ÿù,ÏäòNDrVc+şs*€ŸZªbÄ™	Ömti¾.ïUx¼zCÈ`mı#ô	Q`ÑW_úTü]IøëüŞr5PÖ0yeğy°°3~ø6-ÀŞ{[~˜õ'y+’ÀšÚs³¹­Õ;¡îñİ‹½4œÆ@^j
+i|§(’&Á»Ê-8S O•,‡Öcvºaã¿ÁDI0äb­ÏáIÕ°pÅKìAS¶ ô%gââµ±a‹È ö%wÙ`•v}Å€ypOËHDP	D`ŠE‡åB;Î!oÊŒKx· ú% ná†ÿ‹ğq«óÔ”6ï¾¼Æê7Í£I2ÆãÜf¡ôı^ºÿ‚„ÜÏO´™J‡FA„“™O•Ñ¹™ü¿¯¶Ry1)Š/Ç²G™-!/WE•O½]?ºZ©š˜¹4MuøGC{ÁInÿ™Œ7í¡dSù\Äå
+n1™w6ÌïH!g&ôø×J‡Òë/ˆîJ±ŒÃÌ¥Ï·g”Ü
+ÏÎ½áÿN”AS¼_…'GÒÃKŠobóÅªÏƒ0°ûÁÕ}Ÿ/óT§,w9PÜ¨gU'OÔ7ÇwÙOuŠÅ è$SËÁM.%Â?ñ‘îÇrda~fÀPF‹LZä»9ø?«Jt°c&€ÉÎD
+Ö¡2ÔÉX'½úË~oÛEèÔÏî”ÆÆÙ²MZ7V¶°;ßäö±Á9‘-³»×ôx_³¡ıØR,Û´1‘_ióğ¬¯q³š»9ÊúPv™h[ó #œu$Ç%M_µM‚ø”*KO·Îwğp¯ìœív¼şXÉ¨”µ„¥æ ¿Š²f­KRø«ÅZ<³ŠóËÄÈŠëøç~b¬«?5rêÌºh*ÌîÙÁ(5).ºfÿ
+üçÀ’â#}îKà\Åêg}MÏû«àvëgğ/0¶)íxûÖº¾ÏüÙMòtİ³_3\@òÊf'øÑª¶¿ÎH;åõn˜v|}pÏAyk³âÊH<yÇ£6‚èÿX[ñß–Ø.öL±>Íº£½m9Ñ\u-!»¿‚³hUf­—FßÌó‰ ê"nY·‘)ß)ü”l·_¬nD®OlaŸ!	×œ†,û‚3Ó@<ÎRFJî?Ï^$Ç_±cê†šFßÊ6>÷-ÛÏæUÅN{/…5”³6>~rrt¼ãàD	¾s(ØŸ·æ+9ÂnYÏQc	µ4¯¾‘:”èñÛNæW;·®c‡åmùÛîBÜx­õÄêƒóÌI[½¾|‘ ºê…ª.kVøA'QœBXŠ¢:Ò™"è‹6áŠFæÙo'	(r.Ü:eQ»«f/R³ãÎ«Zt:½‡ê–_K®¼Í¾Uc ;Òµ–»ÌàğÒ¡Ä@,ÎïÇ½:¡kÁÅ“uÚ³²ÁlÁ€öjs­Š], Á¬)š|7†…sö?A§¥¡PÍ	ÃD2­±‘¿Pú÷ê¥=ŸfkÑåJšm{Ô—+cG¦@;<[PzDä´9)iË5Ùı–ot£ìÊŠ˜v$è{s}İJ»ù½cµ *?„n_¿ë~¾êkœ!:ŞøÅaÀÁÑ¥b†ôÕ÷£º=4ÆŒìrØMAÑÆd*ïìÜGøˆ†«j€l*`¯’WÙ‚ŞªWçTéêX‚j%ÖWgK?ŒíL`a¢!¡Ê¿M3|°òUÔ˜S†q£Ã”Ñ™³d– PµÕÿ¬¬Ÿ¤¡6\9bà( §P&›Ï°•İe Ê7ÅîpQ¨†§)§«D†Äjm$U™‰pn¶ üÂâŒîû ñ‡Ìšïx„çÄ=r¦¦©ñ,ªŠ)*M–ï¯^Âï{À”~µPK,Í²`Ç™'-“k›Õ™«2•—Íìá!àæ®B÷¢ÇîüJgç…ºË’™œ€ã½Ø„–1÷ïc™¬
+\jü®˜J¯ĞàäÜ˜0´ELYjXáÚ¿tPÛHkxe˜TÉĞéƒV=]¨*E
+¼ğWĞğA¤Ëğ?±yÜAã~-¥BÄÖ±=ùáj‡f;ú§˜Cèí!¶3ÎœZClÛ³¾ı“"ĞvšvG‰ÈÎüÏDàš“¥JŞØ@Ä-Xz£ÚòL±Ñçª|A/ZsĞ»]¶¸:Ï·Øp†î,|9¤FŞÌ¬±Éú‹|cNúöÃ{`
+´‹3òŒòQĞpİµogN‚eÆ¤—¦.Ã	9hƒj›æJ	…ª DBgAœqm…Ş„U y÷®Ö ÂÇ|¬1éH^ãÊ®×q§Ñ®•YZ¦ü|v%®HÅY%%R-°‚ÍÚeù7À¼Öv®üo9&İ:Ş‘¦¬?(LøäsT€zqÚv´-LL’í>Ê¥¥ûaƒšAÌŒzå¡Så£Û­³ê&6u3¼Âè±\ZÜ¬©çHÅ‰BÊÛ8Æû:cÈ8	Ê{ß l¹Ë{D{HâwŸDÉ’¤?Tm™›¯÷rrÀ7ù›Ÿ	,zÜùÛ¡
+È;z{èÿ¯øÔ7jê³
+åı~ëÀ¹ıø™î¾gt¡_‡ŸH¿N7âX8!ÌÎÓÜ1ŸİĞ|`ñã=î(YaÜ“@>8Y‘Ç‚ÏzÚY†š<•Ğ‚Ü8Íú¸°Q .'DŸ7+eöc`75,x¼ÜAŞ&>’¬Yö
+ğ®òî­ÿâÙ¥E ¿’ÄP¨Æ¡æˆù÷#3«`‹ÅÀdÂÙ¶ ø$yÚ|äªBÿËa÷¤’NH(ôDôl ¼°{’Ønƒ;RÜ%Û"ÿOÁÛIî6CCÑ)6Ôô›f‡¤(\Á|’°8ùUi8fÿ)‡Í]!5‰vB'Ô~M¬ÁN˜]T1!&ÕßëƒÄ¿ÊêöqŠ×®39¡a~Ñ(1O€@I’)H™Û' ÿÎ^«gQ¾ïÈÿ3ƒh¾³GùüÃş$¨§©J2ĞNÑ7±…¨ÁBWNÛäY!€!/PÙSè«<²Lí9ªWöUéu©ÎrzKG‹¡ˆ«¦öCÓ3-~0~KOrw@I¾¸ XXÈ1CI:J
+ÅõJ6­]›'é¡y2ùHb_fğ'ıâì•frv±ÜL²ì%hÕƒÉú*„¹å«Ä•/QªCáÃ$VÔ!ÀÄ·Ë;qŞöÛl‘Ïï3q}ú¥ésŒqÎªKi¢X3åõÔúBD%Š¯0·©ÿ)æùOs	ÖY˜…^àlÅ±‚ë©šjKµ+-‚©d£Rãg§§ĞÛ«äPŠxÆ%7ÜŒ[¾NEÈuÕö¯¤†"ÜåE#ªLç†Îø üö™}^¾Øñ÷½êÊÉjgú—°·‚ÁGÄÕªdıå !$Gà'çyyiè3’eaë—‚ŒfI±ğZÔ}ì˜Y“ps\(è‹jšB˜g€&BûŒÍölÜLÑæ[â‘+v½i@*•ÛÑëk»*—¼ùluîåiúN’¨éí™uš%ÎT½¹+?eÕ¡t#í]jÙ«^6)…a<ÊlÃŞœj¸ÏlÖè´€[1=dæZJå½l,Ä5æ•³aÕ<„#G±t1°¼¹dÔ’ Ó>Uá~½#2% R!xö`^œ-oç~ÑuÁ7‰Ù]Š!ì²qa’kO¾DØ KáF–c—C#u	×¿1T•vê(»1ñíc×ŸºÌ&¤¨•ßa¦î‡¥y]-Y&ñõ%Ø+ AâŠòôedªğaJ¦gù³êÂgBa#²÷·ˆˆ~ŒÓ¸ï·ş¢Áßé®ÌĞ¬X¤°ƒßƒ«rh3ÉÎ(ÿıã”ì(b(î–ìu^x2Ú"mş!ùÔ:&0!A¶k™´âİhÈj!:oìº«¿ĞwÊ5·ŒŞæâY•7ë,¢äX?E6Ÿ1™Ş’¤i6Ø‡¼Â¢CÉ¡ÿå†ŸØ®\È<¤ø‘UÚÊI÷AªÄ+ãxÃ#éĞyóU“Ç­îòÏëmÂ¬·ïègšõİn"=ú+‡)Îı1¾I\»Ùy¼Ç9×õ3xÔ£ŒHÛÛÈ{SØqLŒ²•Íózx¾ÄŸúâ„8¬)6<R"3øî8ûÕ”.,Õ.|nA[.	Gğı†¡6jóÊı¬80LÅ ¾w÷ÖyB5˜½ğg>ÖÕOîjé³±İ¶t`ó–}¬¦NH†&ÎÆOtV#KfÍm»Ïuv—üªï³¹ÂVÎxş›Êk|ê6›¼ßVÅ(wÔFäH¶Ú.ÛÌfuî’õ“Yı&âévª¥ú‹å8´§5¿*³}96ÃFÎœ[SXş‡ŞŸÑÍNË£^şš"¹ â"ş£Ãœ\>/(Î1?;ÄúÒ[‰æÅ}Z¤[5Š&@tvd0û*©TÎªqr^xŠ-ì¢jŞºó)Ì¿8šm¾ªùdŞĞu¸ua^v‹Aƒ.Á
+¸$SÁ¯+òã)øD”ÃÉ­®¹šáïF¾hs*=µs€ÖEl¦ÔÚyyíé¶şÖõÍüGÑ?ŒÈ;+8–“†!dgéíÎ·ÆÕ[i€¸F/"10İ,".¾3‘m=üjQEN~™¶ÁpkÍHŠŠaıá„™Àbe”‘ªLÛ·ó~˜M«0¶Æ¼ı1÷º¼ûİd?é½ÖİS]ÏÓ‰şş},5ù`ç×-¬·³PvHéàÜs¢']ª´§¥]¡ª¯.ÌÒ$Õb€Ye~±&×–ä¬™£Ìu¥NVÌ¡7™È«(n ‘È¹İõWzTSi¼±ÎzAüÊÂ#Ÿ9ÌMr¸
+ÀÊzET0j8!v¡TŞ’¾˜e-Z\…Q*İ;RÉ…<ä.üã4ˆ×A„Ÿé2û˜Á×fx7ß/ú•ªU˜d¸®—&>Rµè:Ip‚†@˜³Jø`±bøˆ@@2@5f_$T““òe>L§ç>ÿ½Ô]U¶	ÕWzhmP!´†jø!ô6âÏïC_OÙ×ï>rò;1ÅH¨#CbÚZ•áR'ßù…7”ğ.xÇı§¾ĞsÊŠ·TşÖ3a'ª™M^o7AQåz‹0!÷Ô…ç k–‘³÷~òÿ×	ºy»éñ	ÂzøÛ	ËÂêlÛmrnAåüµcvBnÀé±7ÁµöÅ‹BĞKDâ–3›?jX³]ŠÁ¶#6§[Î$•,(¯TA˜¼"ñ$ó(2`){ÖİÉ­ß‚Õ	Õ#48^yUÇ{G£i‡ã\ƒl-$hZisbäJ–éá•Áv€hX“c²Cñ·‘NÍñĞtbœÕ…W€£é*] -µ~–9MÕ•ÓÍ£Ju/­kCíŸs¨DIŞë¼«m…&†5	kİLÀª[ıû¬g²S\ j6‹cL)nBø“¡nÉÛÓòúÈÿ4“2!1^8v“X¤W³ü‹2e)È06äîOR“ ²%ŠMè(éòZõÇ	áS¶,NxzvÑÔåñ/\ˆÔ½/UÇ~–Úö1—ì[b;‚ˆû&û‰Qü¾:zv’U¡§íA‚Ö5ˆ~l?-¬Gfj=Ú¢­PTó?_ÉaÚêòt›ÁÛ¨úk¹¹bµ‚xuš%hJ“ÌâNòÄ"Qh£D¥¢ù®7na5›ÈY>¾p.ÂAn¬-Êœ…¦:Êq¹×>æA$ßj,à›öóöûÛç!îÇ!Xë.7oÉäpéÊu¼+Íotê3a.ŸìãrõC1–üÆ²ve#ş3XëË¥¤æ>¡–Åõ÷XcS€ä]*kud8Y5ªKV7XÛ^ÈêzË¹5«k7 )®¼ô&Ğã©;lçB&Å	;ÂCš‘ê^»4¢ÎÊñÂ†®s/ßÈãÖbãÖÎ×ñNós½*zŒlÆ¨	Ç¬¬¬ ±¨d´&e""Ø8TK€Ÿ^î3ê,q¬VÊs‡{İ=·‘É[>Äî²ã	ñÀt¨u'KWg«Ö&¦«¶uŞ£WU¡´àO¢± ŒéT4 ¶IKª"Œ‡––šÓ Âîfgµ4è%céã.<~]¼ >@ ¾HŒ$éşH´¢‰ÚJj¶‡s8†~¯^\ã\p†Í=÷ø÷O?>¤¤¾ûÚñŞ‹@¦‰Œ¶l`¸ØèUÂ¬²LV„­Š ~Ê^®€VXÎ	ÁCª!|Ö*ôÓäÔãeœú‘p«ß‰€DÜ¶¦cABş4!ZCÃ¤İUÁºì_…ì³7s¤ø‹–ÍÈÙŠEØQ²†½–»Ô+“n7Û3 0q¡7õl@»P$ã€&İ "–¯ë¤×m!x|¾ù§Æx©Ö)T5ÑsõUÆãÔÒÃ³Òã‰Ò|»qÑå8
+uîëô-êÜˆÖ±¹v¬¢¶Ÿx7P°_@8Æ/ÏL¬àÏ°&›>
+Ñ‰$‹Ã‰Ö6Ããİ÷y_¤»ç`árùT	@[ÅòÒ“ncÒ/ôÑ`ˆ±N_@;¥îÑHO­…ÏVŸ)7	¤Ûnc¥Ÿ\Õ(XšŞLfÍƒÎ÷Ff)XK=°<$’,™¹÷j[ø¬_ÑúÁƒÜĞÏÍcÚ\ŸÈÖr*{­»îûä4íq†ŠÏ_øÉµ¿ÒØØ¾U™u}±Xíæ…´¬¢ïë<‰O…'Nºã¦Ì	ÆÏ—½å¬ùí£ß¹÷\%~ÛíÌpºîÀ=œå¼Õ¨+áA±ç õW;dá‹Åªõê99I5¼uÃ+y¶XZ[”Š!pPNu?SbRñ±ğñ…ëÏÌ‚N¿GbÍUô<mEÅt-¸^×ß³ˆÈ–ö)~T« ¸Ş	–É)cğ^ËåyÛ6Å±jåE Û23v.óÓ9LUé5Ü½’Y¨ìƒÁjm~qa¤‰êhİê2 =p§-èÙj$WJïÅö&ÒzS{êó”:ZÂ-# æ4“åà°ö¥]]·VÄ¢‘t“«3¢‡$D¶dP'/ä£¶ÀE9ƒ3Ô•>"0¯û«Ù¾	O½´8ÿÂæ0]Ïnt-{–ÀH’8À,¦•KWx:ºŸÜ×(m]pä¦£Qğz0V™îQÓ&ØèY,Ÿ»5Õ½¡« Á=Û•uˆ[%oÓúc%‹¢tƒ½P|]J—³é‘’œN›Á¸–Ó¼Û_-ÊÍ®uR´²°ÿ/¿ŞUxO•P'€3gZ4Mq×[ÄÇi¡úÿ|‰]Ëïza°&Gş¯
+B™”/e8õúU©;
+÷5œöm83`ù¹ñ ”NLDRôXQJd3aáùX¯jÕd‡ô~ì¯m5·’Œ—Î>>Ñ?6§{Š¹¸%~ÃÛÀŞ×[2”KĞ^Æ‚×¹•B Ôo¶bˆVµ$kÙĞe#@òèe8…i¤dDÂ:’`™ªòÙªuŒt…XÅ”|wnEi&Äİ+luÍ©fÅÃEÓ´o?Ã'
+#¡WnEP\®`‡X
+"Ş]$3ø¹zåR±W+KHÍ“)tHšÌÛÊª îœÏëkËf4äoGÒËe¢¾åõ¿TP£¥h­¹4YàH›JU‡òe?ÕY[Ó¯¢ÀbæiLÏï•÷˜ÖÖtÑ¥=<CºoFCoš<PTT‚0-5é”ŠGY%İL'mÕ»+tP÷IêÍ='ÊMhQoÓ¬?'‡ì—LJW‰R»n±Ÿ›°@#IÛ‡7 nT*öLeè¥æe´ ƒf[%}‡b±tòÓEqêå0™W[šç/Ì:5fÛá5MÇñ-@1³ÀnàûÉ¾¥á£¯Àğ£GÎÖdµ ˆ¸1—[­‚ n9IªŒ)Måµ YK½·ø–¶"7å*Ñ¤ruÑ<ê	¼î7çg½U¬ùª™çõµÍÜ³”É,Ö²[R“ÌÌüñ†–Ğ„Âğ"éÎht9ÄK•ı›€È§c'Öo#ş{dƒUAÒÜæáù’å]>œöñŠ>axû]ÚuŞqÏy{¾Û|[}Í{}œ€”¿æ›¯›İRğ³`îDyuĞf«äF'¡mD‘Bûjİ†G¸iŒ	¬w«²Í}PæË…ZéG_'—à=ß¸í.dHÊbï»¼å´õjq6y@ŸaÎù.Ga27%mm%éJôÛÖ:–½5eÃçÅ	ú¤OÍ?k]„iIcİÌòŸ¹Ê”ïjât6ëíÉ{ŸaRƒ–Ş…qÚZıÆµÉ0cq˜	†1…Y¾RÏúIõF!‰
+9ßèuÈæzzËİİJ6s#ùìÆ…{kT=Àòûê0Ş;Ú{øä&ç*Rs[¹ši@ùöp4¦ô%ÙôÔŒ®¹šØ¬-cq°ßóÚÀlqÕ{Ó¹¸¡k/»­í«h2¢dß‰OBŞ80A‡©ŒNFÅyÿUvÙÀ®aÅ”Ó*Ä™©'¬BÎ²X’ÇìM'¡c^ëK3•›†nÃ[q±qs˜^¢àsc#V.üj Å…`ÎmQ"wQsêí–ø¡TÇ€Ëª7ªPŞš:Ø…Ü_tŞ¸~<ËYón†µ[ıe“ğ‚…K~ƒ¾–åûâ£äõÕÓ8è¾Ï~^Ztoß4ıçQtåBwh>&x‡b7NyõØß+nÖ|?ãİõ¬qL©Æˆú}(¼«=M®ª<µzC˜£¶VÑxV
+ìô‡´¾^–ª2Õ˜ª}÷Ñ-’¼äCShvÏ”Æ¿?h"÷Ğs‹tÁÛW0•~M’ÍuqdÜØfŠqÚ-”w›X-‰¤³fPşN÷~jµT;¿^š46œş†â£Q›&EÄ…Òâq«™)=<6<=âqâÖO¬gñ²²X› ÖÿşÅJÖŞó°œDÉl…÷SŠ ­³0›Vñ+…q¤]ÿTtdQ¿†:‹ÿ]Ò*7-J´šìõ5şÖşeR>yõ(2Îo|Ws¿•ÙŒ»EEĞV»¼k¯<¨ø$s­Å­—"¶›Í/ªˆ*{R×(œ4~G…)ÆÒÉiI<F/©ÊÜ~c‰2<LÆ»3aÑ¿OU—’ıVHïrÉ"cÆ23?7\9TáÈ°¶KµÆSfÁÇÎ½J¿I@Ñù,\?—~óø4¢-Ô5í|óa¤%4öç[åş6"Àƒ?ìè)¯è±_×—<nnf½ÅÂÎxó‰m®ËÙ¤§×µçGpWÇ‚‡BqöÍ^§ÌºkR,Ş'Ü»¯”ß">ë‘f‡°[àåş,ù§:W†97$¿Ğ‘ÿT8Có§©óê_ìI"ÅyÄĞ6 «0]d÷Ê[ïòŸ9Töqöaµæ©hµ¥x>"Lüií (Ú+¯ƒòF	OŞ7ÒUŒñ>Iæ,¿ë“%¿yfƒØïÅµl¹“::ßÓbÊ<q¡q9¥N7.o \¥¨™^'4-…
+\c/ŠÀM^P`{ÒŸÍğ¢–óïh2'âŠ”Î#c7¾áN××{6ån]àú¢;¶³@ëÒ`@öº}yè(F¯[ÈÁá¥{}èÆdYmµDuv Ş¿MÔª—<h³òUÇôò­8}‡pì0â´²ìıŸU5ÌŸÛŠ.ÆB‘ol¯‡È½7~`aÛÚmC»;QE¦Ù‰˜µ âP&FD+İçsóËúfY<·ôlãÜÅéYZ\.5ÿ»¼›—» h[8#ŠˆNÿVsĞF“–+EˆôÒaUüWb|”Ó#kÊ²Êk"še.n+¬?ˆ‡óTcÏÎÛK²;¸¡mşÑ_ƒĞ¯×¹¥ÒØ­EvãJ¡i¯àøp‚ëepÏ6gWµc‡ıîÿ9tÌ*E=%Ùš’‚_	Ãê­+Í"¶f•xÌúêªV1Ødz»A«4İÌ/''ÄÜü;¤öõ—|¥}iDoÛœ…géŠšiW‰O­2ŸDœ^:¼–ÙĞ…AL´v¿õå³?ŠÅ•Á€ÙÎæ‚BŠ¨Ó_m€M‹Uğ-ÕÕ>ë^îëU>‡>!î¦Úï*½bêÊ]§œ~æêº/ «~ÓízY‹~&‚Ìí©nòûKcê‹z	?Pîş!d³÷£éßâU[kn0èáóïò=ÅôÁ›µóäì*€<[%Y]xŒp~@õ|EÒ&`]É×·É[ûn¿}±P¸`É™fhM³x?v¾Õñ!ìÕ-YÜÁ•ñnº¢¹ƒÀ{‡'o–÷×mƒÎƒîlÔúô§—)|u]7ß–¼xŞSÓÍZ‚ˆfØ”ŞÇ°“nÏİÀjq>cÜ/›¾w´±NG¦“Ë@CÁ®6••¿ÅNİ5PNÿuñB†°w¬f- /ˆ)/˜¼]_”“–ÖğñlÅº…b™BÍ4.|–‹©FÎÅ\ÿoÖÔÃòƒßÙ‡³òwõ-{ÜÓmX!ÉÅlCQ’iLC®N¦Üù\CQÌª"Ô*kÁ¼*¨ŸşR°¯+æ¤.Ñ}£”ª¬Ä‘ÓÖ½Àâk`YUs™nïlMæIÂ\8LÏiv¦"ŸÖy;·³˜=€tn÷,6Á{ìÄÎj¡E}7Œº1Ø Œ‡4Ö'±ÄÎsÓ§óµÌ6âwØ°}™Üy7dWQ<ßßÜìË˜CòN»l8
+¡R;û¡„ÊÑSÕF Œ4±‡ÒÍèmãåĞÑŒÕ¦˜®‰ñÏú³!SwÓí)Ë6&'‡Iq|§Å!Ì¤2pGgÈ+%ƒ:HhÑ{–¿+¤B†³¡.'\L‡
+}v'É	ÍVrFK/t†=şƒK7’Ùùˆ½3A»rgkV˜‹Œqwëè,¯fp±¡_”ï¶Z§gÀ5Ô	«8ßuBÿpçpŞù@ßÙ7ÚY¤Å?Å .)X°Z©À¡æ'ù ©F/è|:&¼àô‰6·‹3Á»éøÿ“w4.DKé ¤ø¨bP¨5mbO/G"(]ìì€è	•3mÜ6Í»{éö–DîÌÓİF—«£q–â¶jâêf4¢²ªÎó8OÈcÆ>Ğ0r/fQg,—#'å+u&şà$ã°É Ô# Àß®fÀÑñ<NÓ„É;Íò÷¯Ù>ÿ7 ë‚§4J¿ká¢ÙŠŞìÖ¼¿™‡hyÚiı•í9N¯dsÒaÜ3|Y@U¿Œà[³e.Ñ²ôĞn$H„Nd§¨g¡¨İ3]t:
+
+Ä´–ĞöÈ1¡Šuº‰ËÌ¬ù¬AøXGía4´$…°!dô8RYw,È³Ì@dY"qËpå”„fÈ&ŠÍ Â9@²ÀøäıR+±ÿ¦Ğ–7E9D¡^aoÁY$ˆ#wjd»ÜÙA^Å[]§Pû®4¶Ğ“l…®ÂÚ¿L&{JÁ™DÈ]ĞSp¸s¨¨HKÅ@FĞ25¦:µ¤»ˆ7Xš[ä=J)<½÷äong2snÔÎß+êvá#)HÈsåy"YPÉ/Ù\¤%‹ô\uA¦¯ñqHà3c\×jl‘¶“Ó9q5QÉ>ùa´<0„ÅHùêAÍ>9/tí«~è-Ê_ì<roé—öA-QÆr}º:ÓÉ@Uam C‹YIÍ06ÁØÕ«}Ş®6?K2ş-_Í÷ˆæ² _¡1jóM‹»İyûºr&“1àY1[‡ÈT¼Ÿı²ˆ¶2TÛ©—9&Pò4]ùá„€Ç­kä¼9ƒcÉ0zÌœô_6ÇŸ?}"¬Uv«ñİ}hĞicnSÜñ`Øá|n¶Ô¥îÂëñ¯:’ã—^êxèËt/¯£v±è5ıèÍş6·K´æÒG,2-ÔÜ¶]=,ê1íĞ« hU¸š4TÑ‘°r†·eID¤è©»Ó[n‰®ÿ‡	º1Ø­ÄoõÊ8ƒÁ…Gô78T²3İ§i£À|P¹§Éç·pkš~’xO—†bÚ7<…ê‹´³­/¡^µšXVº#˜•OË} ’L[FÕ‘¤]‹rŒšM,•¹±ĞŞ¬G¡„T]ûiÑÌòíªó©NÖôìh‚l …Q²‚¾Ñê:´¯Fs—oP9QSaoÖñ_ªÍ‚¢à!’Š–p$#ñ«ánOVYä.gì¹w”°ÇÄğ¤.QÖmû«9"£á¥>¢$÷Ğ”ø: MHÎ‘¹M´èbåF-îR­œ„ÒÛ9	S Óö€ó‰ÎÖ:M®S•¯Ö*ÆU,c¯N-Ë›¡ºÁÛqÜMUÔzæLHmç¯Ú
+´2«¬×¡ê µu[ØhfGS
+ÌJàÓ}½ñb±e«²RvdS8éqœÓ¿ÕOëLÄÁ, >­%÷§©Ïì—È;Ì(äÜ1>ÎS™^·‚MJÍr7ÈJEvº£«ÜÆøn;{'ü=.?Æö—C¹|åE=ºŠoã;^ÖTo´l:}¦Oo4½–ÏÆ§Òéí^JT)ÿ’Xİ<n’À°']…Äøˆª¢Åu+Lvã[éeıê•Wk>§8Yeíı¬bİn}úæ&õú=
+ş'<-º7ºÍŞİËONãrèîõ9m-#T°ÿè±é8;×,Ò5 åD¹şaÓpi-(±¾VË>A"·6¶ÔÏ…»~4j[¤Mæƒ±Ï£h“%x]&»:Ú%FD	Ÿ¨'úòæîÌ½®øŒ0ë%wûV>œ¿ƒ¸É1$½¸¾m1òæzø“wô;á÷;Ö;û°øˆ=8=§pÎ3†O6§Ìÿ”oê5ºÒkÌåv²f`šÍù2Ü4²æÂ*‹n•IÈø[¢õ3•`›-ôv¦Í5¦ÕKûÎ-
+<µ{6„Æ,¼¤(IµÁ :ÉV “ÓU9üg£’ÛÙ”S!p
+1ên!¤O‹Üô”¹øélÜ…È“VF‰’â!¶*2¿Î˜«ió£^±÷ƒ–+ßFCÍ/c±µE ˜µ=wM‚ú‡¤“V<EÓ“I(­^/ØGÿ—3<¿Şo¿ŸX÷‘Oçxğ~$“…­¼›Å›³ø9X÷…oçlÏh¢°8™øŠüBäH/dş‘ÿDŠ|xÖk»Ä®Í}¡åÅ¸Ï¢æsSİ­ƒ/ÃøöcçñÓİ£ßø§+üôàèI}™>/.¸¶¡æ©ŠÒ%x×G—á1í{™Åmø‡!‡˜mÏKÓdóóÜ˜Iøö7?±¯±
+qşİ½ßØ¾aéûîYTy‚RâÆÌüØ¡ò’â|µ#SûE{S&‰cá–]Ï“T¯±ñTÒOTî÷à_9MÔÒôjŞĞX÷q"§É‚‰Ëb¥Ra?•FÖ¬Óôjÿñl`“IÃè›ãp‹FU.ücrO´„eF9\™*½úêgÔ:‹µ–ğ0¾¼Œ/E¼\l¦¾¯t‚s#8úOn°ÌĞpEÅ`qæ¬º&f9äZÕsP}hŒahlÅˆ¸WR,_·‘˜Ÿ	uâƒu¦w?Iõk’EEû´p+±/D¿­Šz	=©»>U¾Ôª¶Š\5‘`Ï~Q¨…Ó=Æè`AÄ|‡İ ±yÉªœKˆ‰¯å°éğ|=*tÆ_ı\ÓÑœÄkÿ2®Î—iºÇ«’è„­îÿëˆtgìâ³ëNôq«:šè\h/‚.Øİ/éwÍ.¸‚¶60¿æÛºGcõÑÛş¬_ÃÑ€#="¶¨ëÓ¬§”wŒ—#Lhÿ‹ìvÉrJÔ~mÎTaQ†<T¦HÉkÏÅã¯òÖtâçebä¤€Å©Iî¯Õë–İ©Hôe´¹ÿƒS Ó·úBìc@	R5…¬¦–rÑnæ:§ÂUWà+gÊô‘v0;Y	oºógByë´¸ôb¢Õ^\dÊÉ¤¥|PçÚy±Ï‹s¢%=Ÿø5Q¯c_{>Š¤Ø¼Õ©€¡-ê>4ºşÿ¨4\ô3ˆ
+w+Œ´scRæÒÑ:Èónh…$ ¥H&¤øH€¥ëÖRFìÏÂõm#yè<”x19nN«ûÃTÁğLÇ©€¥ïê>ÄÙ~ÚÅ0+pOF¤áø­áÃÜ‡S.0ö¢D£iŒ’;~Şİr:‡^=o3ˆXÛ„ÆÛ¿°kîiQ‰…m9Ìïi\oÜÄ}çkÕ =×òŞ	Á¯Ù[A#ÔîsñiEÎïyMêÑâô“g±´vxŒxš]İ4UU‘'X<aÁô:}ß‹Îæ9wI“İs»oeãöij³êëwV)Ü[nú¼ùø“ƒgãb<_yŠÏYÅ†·KÆš÷ªU#­Ê/nl:Ô–|
+Ş™H0µùv)pMÂ}óTox¦|Zë$:'o’óf‹£dEç‚lĞ÷yµŸÑîhÌ7TÒoßwDKµwâôo’tãgêäåñª²Ê¡®M„‘‡óÚ óõEµÂV"ï6¶.«MrwW²]üæ®OYŞˆ#  ÖØ¬)VÙ!¥Qã±bM÷âs_8'ì¡ç4m„P>kŒsã³œŠßŒıw·„Ğ¨äe?ÿMJİåµ-ö­š”¶Ö#Ö sşî	Ÿ10ë/yøsE;–Ä•R}œÁ2}?.Áåµ¤Ì{ÁÅs–­+åÃ5 RÑÃŠ½<ºwÒ(¶ŞRÁCÅÔM..‘›HßA*>‹+Ã¼Âh/ŠdÈ ¹D¬Èc¯/ó÷—>C§ÏğkÁâ?ô¿XÎ'R¡ôzïß(Ñ%÷ww—OúñÒüi+0.½œ±.¦X`‡B¿?sVùú[E`m«¢œ¦º‚~ğ-1µ$x‘<hâ	*áF ù¼““·;¦Ör ‡ïPnÊ¿±*\Õ–I¤:Àÿ£åşj$b=x4†tQ,ÿyævm!îjÚAdû£>Mz¢İŒ„ŞÕÊö)İÄB¸c—ş…ü•ØWf"E#Ö¶ı-T«§¬âMÊ(¥£¥•¬-å„“QĞü;L¬«s‘aØĞ`ÄE@f×|êñüÔèJˆ«)€•÷m¨ëé¸ú×O¢ıtË)ÅBíå—¾ú»ü–"<iŸ0yÍ|Câ¨G;ëGÿ*15‰`´É–ö`jLG,ë½88¹„ŒaqEx´a'³gGÙó‚:,GÆhY ¸ñ^¹Æ))úacsUÃ©áÒÈÎcÇ—,ş¨Q—Ãÿra¦â‹jëgÏŸ'º[á°ƒî\Œİğ—	æ]9vLy	6ŞÊe4ÁÔKqß gÊı;ÁêæÄU0Ãr#ÜÑµr§ìzô(\¿Jyø¥&?¸un±t…G&_’Ë2Q¦K[’"õ•ÈPz‹D*T <Ñ'°ú$Ï©6ÒìÊ¼¨êàÄÃ1xeÀHtÖŸñ-pĞ…²zsğ˜Ä|Ï‹ö†ìÆ8l2>f›Õ¬ˆ@º¦’Š®îúh§ì…H˜?×nª•_Çjà)ò¨;áe&›‡'¢Šâ¬ôMH“«I¦ë×6Kq_Ù?MËnÔÑğzœy7ºÍÇ9|ºÃİIğ‘ñ0l6­í²dY“U5“¹c´ã
